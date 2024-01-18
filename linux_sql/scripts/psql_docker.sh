@@ -10,7 +10,7 @@ db_password=$3
 sudo systemctl status docker || sudo systemctl start docker
 
 # Check container status (try the following cmds on terminal)
-docker container inspect jrvs-psql
+docker container inspect jrvs-psql | head -26
 container_status=$?
 
 # User switch case to handle create|stop|start opetions
@@ -32,7 +32,7 @@ case $cmd in
   #Todo- Create container
   docker volume create pgdata
   #Todo-  Start the container
-  docker run --name jrvs-psql -e POSTGRES_PASSWORD=db_password -d -v pgdata:/var/lib/postgresql/data -p  5432:5432 postgres:9.6-alpine
+  docker run --name jrvs-psql -e POSTGRES_USERNAME= db_username  POSTGRES_PASSWORD=db_password -d -v pgdata:/var/lib/postgresql/data -p  5432:5432 postgres:9.6-alpine
 
   # Make sure you understand what's `$?`
   exit $?
@@ -47,6 +47,7 @@ case $cmd in
 
   # Start or stop the container
   docker container $cmd jrvs-psql
+  echo 'Request Completed'
   exit $?
   ;;	
   
