@@ -11,7 +11,7 @@ This is a single user project as its purpose is to improve SQL and RDBMS knowled
 
 ### Table Setup (DDL)
 #### Create Tables
-````sql
+```sql
 -- Create table members if it doesn't already exist in cd schema
 create table if not exists cd.members (
     memid integer not null,
@@ -51,7 +51,7 @@ create table if not exists cd.bookings (
     constraint fk_facid FOREIGN KEY (facid) references cd.facilities(facid),
     constraint fk_memid FOREIGN KEY (memid) references cd.members (memid)
 );
-``
+```
 
 
 ### Table Modification
@@ -119,7 +119,7 @@ where
 delete from cd.bookings;
 ```
 ###### Questions 6: Remove member 37, who has never made a booking, from our database
-````sql
+```sql
 -- delete values based on some condition
 delete from cd.members
 where memid = 37;
@@ -130,7 +130,7 @@ where memid = 37;
 
 #### SQL Basics
 ###### Questions 7: How can you produce a list of facilities that charge a fee to members, and that fee is less than 1/50th of the monthly maintenance cost? Return the facid, facility name, member cost, and monthly maintenance of the facilities in question.
-````sql
+```sql
 -- where 
 select 
   facid, 
@@ -144,7 +144,7 @@ where
   and membercost > 0;
 ```
 ###### Questions 8: How can you produce a list of all facilities with the word 'Tennis' in their name?
-````sql
+```sql
 select 
   * 
 from 
@@ -161,7 +161,7 @@ where
   facid in (1, 5);
 ```
 ###### Questions 10: How can you produce a list of members who joined after the start of September 2012? Return the memid, surname, firstname, and joindate of the members in question.
-````sql
+```sql
 -- date
 select 
   memid, 
@@ -174,7 +174,7 @@ where
   joindate >= '2012-09-01';
 ```
 ###### Questions 11: You, for some reason, want a combined list of all surnames and all facility names.
-````sql
+```sql
 -- union
 select 
   DISTINCT m.surname 
@@ -189,7 +189,7 @@ from
 
 #### Joins
 ###### Questions 12: How can you produce a list of the start times for bookings by members named 'David Farrell'?
-````sql
+```sql
 -- nested select
 select 
   starttime 
@@ -207,7 +207,7 @@ where
   );
 ```
 ###### Questions 13: How can you produce a list of the start times for bookings for tennis courts, for the date '2012-09-21'? Return a list of start time and facility name pairings, ordered by the time.
-````sql
+```sql
 -- inner join with condition
 select 
   b.starttime as start, 
@@ -222,7 +222,7 @@ order by
   b.starttime;
 ```
 ###### Questions 14: How can you output a list of all members, including the individual who recommended them (if any)? Ensure that results are ordered by (surname, firstname).
-````sql
+```sql
 -- left join
 select 
   mems.firstname as memfname, 
@@ -235,9 +235,9 @@ from
 order by 
   memsname, 
   memfname;
-``
+```
 ###### Questions 15: How can you output a list of all members who have recommended another member? Ensure that there are no duplicates in the list, and that results are ordered by (surname, firstname).
-````sql
+```sql
 -- inner join with distinct
 select 
   distinct c2.firstname, 
@@ -250,7 +250,7 @@ order by
   c2.firstname;
 ```
 ###### Questions 16: How can you output a list of all members, including the individual who recommended them (if any), without using any joins? Ensure that there are no duplicates in the list, and that each firstname + surname pairing is formatted as a column and ordered.
-````sql
+```sql
 -- nested select, with concat/distinct 
 select 
   distinct m.firstname || ' ' || m.surname as member, 
@@ -270,7 +270,7 @@ order by
 
 #### Aggregation
 ###### Questions 17: Produce a count of the number of recommendations each member has made. Order by member ID.
-````sql
+```sql
 -- count
 select 
   recommendedby, 
@@ -285,7 +285,7 @@ order by
   recommendedby;
 ```
 ###### Questions 18: Produce a list of the total number of slots booked per facility. For now, just produce an output table consisting of facility id and slots, sorted by facility id.
-````sql
+```sql
 -- sum
 select 
   f.facid, 
@@ -299,7 +299,7 @@ order by
   f.facid;
 ```
 ###### Questions 19: Produce a list of the total number of slots booked per facility in the month of September 2012. Produce an output table consisting of facility id and slots, sorted by the number of slots.
-````sql
+```sql
 -- sum with condition
 select 
   facid, 
@@ -315,7 +315,7 @@ order by
   sum(slots);
 ```
 ###### Questions 20: Produce a list of the total number of slots booked per facility per month in the year of 2012. Produce an output table consisting of facility id and slots, sorted by the id and month.
-````sql
+```sql
 -- extract
 select 
   facid, 
@@ -341,13 +341,13 @@ order by
   month;
 ```
 ###### Questions 21: Find the total number of members (including guests) who have made at least one booking.
-````sql
+```sql
 -- count distinct
 select count(distinct memid)
 from cd.bookings;
 ```
 ###### Questions 22: Produce a list of each member name, id, and their first booking after September 1st 2012. Order by member ID.
-````sql
+```sql
 -- min
 select 
   m.surname, 
@@ -365,7 +365,7 @@ order by
   m.memid;
 ```
 ###### Questions 23: Produce a list of member names, with each row containing the total member count. Order by join date, and include guest members.
-````sql
+```sql
 -- Window Functions: over all
 select 
   count(*) over(), 
@@ -379,7 +379,7 @@ order by
   joindate;
 ```
 ###### Questions 24: Produce a monotonically increasing numbered list of members (including guests), ordered by their date of joining. Remember that member IDs are not guaranteed to be sequential.
-````sql
+```sql
 -- Window Functions: row_number
 select 
   row_number() over(
@@ -394,7 +394,7 @@ order by
   joindate;
 ```
 ###### Questions 25: Output the facility id that has the highest number of slots booked. Ensure that in the event of a tie, all tieing results get output.
-````sql
+```sql
 -- limit
 select 
   facid, 
@@ -410,7 +410,7 @@ limit 1;
 
 #### String
 ###### Questions 26: Output the names of all members, formatted as 'Surname, Firstname'
-````sql
+```sql
 --concat
 select 
   concat(m.surname, ', ', m.firstname) as name 
@@ -424,7 +424,7 @@ from
   cd.members
 ```
 ###### Questions 27: You've noticed that the club's member table has telephone numbers with very inconsistent formatting. You'd like to find all the telephone numbers that contain parentheses, returning the member ID and telephone number sorted by member ID.
-````sql
+```sql
 --like
 select 
   memid, 
@@ -446,7 +446,7 @@ where
   telephone ~ '[()]';
 ```
 ###### Questions 28: You'd like to produce a count of how many members you have whose surname starts with each letter of the alphabet. Sort by the letter, and don't worry about printing out a letter if the count is 0.
-````sql
+```sql
 -- substring
 select 
   substring(surname, 1, 1) as letter, 
