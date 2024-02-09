@@ -145,14 +145,17 @@ where
 ```
 ###### Questions 8: How can you produce a list of all facilities with the word 'Tennis' in their name?
 ```sql
+-- where with like
 select 
   * 
 from 
   cd.facilities 
 where 
-  name like '%Tennis%';```
+  name like '%Tennis%';
+```
 ###### Questions 9: How can you retrieve the details of facilities with ID 1 and 5? Try to do it without using the OR operator.
-````sql
+```sql
+-- in
 select 
   * 
 from 
