@@ -2,5 +2,5 @@ target/
 *.class
 *.jar
 *.logs
-*.idea/
+*.idea
 *.swp
