@@ -1,5 +1,3 @@
-package ca.jrvs.apps.grep;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.util.List;
