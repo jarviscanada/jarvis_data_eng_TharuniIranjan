@@ -18,19 +18,24 @@ To run the application against the test folder and its contents alongside the pr
 
 ```bash
 # define the 3 cmd line args
-regex_pattern = ".*Romeo.*Juliet.*"
-src_dir = "./data"
-outfile = grep_$(date +%F_%T).txt #change output filename each time it runs
+regex_pattern=".*Romeo.*Juliet.*"
+src_dir="./data"
+outfile=grep_$(date +%F_%T).txt #change output filename each time it runs
+
+# run the program
+#1
 java -jar grep-demo.jar ${regex_pattern} ${src_dir} ./out/${outfile}
 
-# verify results
+#2
+java -cp target/grep-1.0-SNAPSHOT.jar ca.jrvs.apps.grep.JavaGrepImp .*Romeo.*Juliet.* ./data ./out/grep_$(date +%F_%T).txt
+
+#3-memory option
+java -Xms5m -Xmx40m -cp target/grep-1.0-SNAPSHOT.jar ca.jrvs.apps.grep.JavaGrepImp .*Romeo.*Juliet.* ./data ./out/grep.txt
+
+# view the results
 cat out/$outfile
 ```
 
-To run against personal example, run the below line:
-```bash
-java -jar grep-demo.jar ".*Romeo.*Juliet.*" "./src/test/testDir" "./src/test/test_output.txt"
-```
 
 # Testing
 To test whether the application is running as expected, you can run the below command in your Linux terminal and see if it matches your output file:

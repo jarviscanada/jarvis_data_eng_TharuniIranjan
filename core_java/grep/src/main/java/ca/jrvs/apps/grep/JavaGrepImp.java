@@ -131,10 +131,13 @@ public class JavaGrepImp implements JavaGrep {
 
     @Override
     public boolean containsPattern(String line) {
-        Pattern pattern = Pattern.compile(getRegex());
-        Matcher matcher = pattern.matcher(line);
+        if (line != null) {
+            Pattern pattern = Pattern.compile(getRegex());
+            Matcher matcher = pattern.matcher(line);
 
-        return matcher.find();
+            return matcher.find();
+        }
+        return false;
     }
 
     @Override

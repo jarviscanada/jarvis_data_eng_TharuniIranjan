@@ -1,21 +1,21 @@
 # Tharuni Iranjan . Jarvis Consulting
 
-I have a strong passion for problem-solving and enjoy taking on challenging tasks. My ability to adapt and grow within an ever-changing environment is a valuable asset. I hold an undergraduate degree in Computer Science and have gained a wealth of experience working at Jarvis and other co-op positions, which honed my analytical and Java development skills. My exposure to an agile work environment has also equipped me with the ability to effectively manage my time and communicate and collaborate with team members. I am eager to leverage my acquired skills and make a meaningful impact in the industry. During my spare time, I enjoy playing board games, and leisure skating, which has taught me the value of perseverance.
+I am a software developer with a Bachelor's degree in Computer Science from Ontario Tech University. During my undergraduate degree, I completed courses in Full Stack Web Development, Statistics, and Machine Learning, where I honed my skills in programming languages such as Python, R, and TensorFlow. These experiences sparked my interest in data and the importance of data management and pipelining. My work experiences at Jarvis, Osler, and the City of Brampton strengthened my skills in: Java, SQL, Bash, and PowerShell. I was responsible for database management and software development, where I streamlined current processes and uncovered data insights. My exposure to an agile work environment has also equipped me with the ability to effectively manage my time and communicate and collaborate with team members. Currently, I am looking for a Data Engineering role within the financial industry where I can apply my skills and experience.
 
 ## Skills
 
-**Proficient:** Java, Linux/Bash, SQL, Agile/Scrum, Git
+**Proficient:** Java, Linux/Bash, SQL, Git, Agile/Scrum
 
-**Competent:** Docker, Google Cloud Platform, Python, Multithreading, JavaScript
+**Competent:** Python, JavaScript, REST APIs, Vue.js, C++ 
 
-**Familiar:** C, C++, Machine Learning (TensorFlow), Web Application Development (Vue.js), REST APIs, R
+**Familiar:** C, R, TensorFlow, Docker, Google Cloud Platform
 
 ## Jarvis Projects
 
 Project source code: [https://github.com/jarviscanada/jarvis_data_eng_TharuniIranjan](https://github.com/jarviscanada/jarvis_data_eng_TharuniIranjan)
 
 
-**Cluster Monitor** [[GitHub](https://github.com/jarviscanada/jarvis_data_eng_TharuniIranjan/tree/masterhttps://github.com/jarviscanada/jarvis_data_eng_TharuniIranjan/linux_sql)]: This project aims to assist the Jarvis Linux Cluster Administration (LCA) team in managing a Linux cluster of 10 nodes/servers running CentOS 7. The project utilizes Linux command lines, Bash scripts, PostgreSQL, Docker, and Git to implement a Minimum Viable Product (MVP). Users can write SQL queries to extract real-time resource usage data, facilitating future resource planning. The project includes a psql instance for data persistence, a bash_agent with two scripts (host_info.sh and host_usage.sh) for data collection, and Docker for database provisioning. The source code is managed on GitHub, and cron is used for scheduling the agent scripts.
+**Cluster Monitor** [[GitHub](https://github.com/jarviscanada/jarvis_data_eng_TharuniIranjan/tree/masterhttps://github.com/jarviscanada/jarvis_data_eng_TharuniIranjan/linux_sql)]: This project aims to assist the Jarvis Linux Cluster Administration (LCA) team in managing a Linux cluster of 10 servers running CentOS 7. The project utilizes Linux command lines, Bash scripts, PostgreSQL, Docker, and Git. Users can write SQL queries to extract real-time resource usage data, facilitating future resource planning. The project includes a psql instance for data persistence, a bash_agent with scripts for data collection, and Docker for database provisioning. The source code is managed on GitHub, and cron is used for scheduling the agent scripts.
 
 
 ## Highlighted Projects
@@ -44,11 +44,11 @@ Project source code: [https://github.com/jarviscanada/jarvis_data_eng_TharuniIra
 - Major Entrance Scholarship (2018)
 - Dean's List (2020, 2023)
 - President's List (2020)
-- GPA: 3.45/4.30
+# - GPA: 3.45/4.30
 
 
 ## Miscellaneous
 - Career Essentials in Software Development by Microsoft and LinkedIn  (2023)
-- Physical Activity: running/skating
-- Entertainment: board games/video games
-- Home Improvement
+- Leisure skating: I like to try new things and skating is one of them. I might not be the best right now but I improve bit by bit everyday.
+- Board games: I love playing strategic board games with friends like coup, codenames, etc.
+- Home Improvement: Growing up I used to love watching home improvement shows like Property Brothers. I started doing little renovations around my house and hope to do more.
