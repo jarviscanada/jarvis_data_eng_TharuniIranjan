@@ -7,19 +7,20 @@ To run the application, follow the below steps:
 # STEP 1: navigate to the correct directory #
 cd core_java/grep
 
-# STEP 2: run maven #
-mvn clean install
-
-# STEP 3: run application #
+# STEP 2: run application #
 outfile=grep_$(date +%F_%T).txt
 
 # Approach 1: JAR File
+mvn clean install
 java -cp target/grep-1.0-SNAPSHOT.jar ca.jrvs.apps.grep.JavaGrepImp ${regex_pattern} ${src_dir} ./out/${outfile}
 
 # Approach 2: Docker Container
+docker_user=tharunii
+docker pull ${docker_user}/grep
+
 docker run --rm \
--v `pwd`/data:/data -v `pwd`/out:/out jrvs/grep \
-${regex_pattern} ${src_dir} /out/${outfile}
+-v `pwd`/data:/data -v `pwd`/log:/log \
+${docker_user}/grep ${regex_pattern} ${src_dir} ./out/${outfile}
 ```
 Keep in mind: regex_pattern and src_dir must be defined beforehand, or replaced with strings within the command.
 
@@ -57,9 +58,9 @@ cat out/$outfile
 ```
 
 # Deployment
-Maven was used to build the Java project, Docker was used to containerize the application, and GitHub was used for source code management. When running the application for the first time, make sure to pull the image from DockerHub:
+Maven was used to build the Java project, Docker was used to containerize the application, and GitHub for source code management. When running the application for the first time, make sure to pull the image from DockerHub:
 ```bash
-docker pull tharunii/grep
+docker pull ${docker_user}/grep
 ```
 
 # Improvement 
