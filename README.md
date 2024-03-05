@@ -44,7 +44,6 @@ Project source code: [https://github.com/jarviscanada/jarvis_data_eng_TharuniIra
 - Major Entrance Scholarship (2018)
 - Dean's List (2020, 2023)
 - President's List (2020)
-# - GPA: 3.45/4.30
 
 
 ## Miscellaneous
