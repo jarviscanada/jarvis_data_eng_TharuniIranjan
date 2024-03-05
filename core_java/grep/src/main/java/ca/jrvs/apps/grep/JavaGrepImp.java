@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class JavaGrepImp implements JavaGrep {
     private String regex;
     private String rootPath;
@@ -16,7 +17,11 @@ public class JavaGrepImp implements JavaGrep {
 
     final Logger logger = LoggerFactory.getLogger(JavaGrep.class);
 
-
+    /***
+     * User inputs 3 values into terminal: a regex expression, the root directory path and the output path
+     * Values are stored and processed accordingly
+     * @param args list of 3 arguments of string type
+     */
     public static void main(String[] args) {
         if (args.length != 3) {
             throw new IllegalArgumentException("Insufficient number of command-line arguments. Expected 3: regex pattern, root directory path, and output file path.");
@@ -36,7 +41,11 @@ public class JavaGrepImp implements JavaGrep {
 
     }
 
-
+    /***
+     * Getters and Setters
+     * Retrieve and store data for the 3 command line args
+     * @return the corresponding command line arg being requested
+     */
     @Override
     public String getRootPath() {
         return this.rootPath;
@@ -67,6 +76,9 @@ public class JavaGrepImp implements JavaGrep {
         this.outFile = outFile;
     }
 
+    /***
+     * Top level search workflow
+     */
     public void process() {
         List<String> matchedLines = new ArrayList<>();
         List<File> listOfFiles = listFiles(getRootPath());
@@ -84,6 +96,11 @@ public class JavaGrepImp implements JavaGrep {
         writeToFile(matchedLines);
     }
 
+    /***
+     * Creates a list of all files that exist within a folder structure
+     * @param rootDir input dir
+     * @return list of file paths in string format
+     */
     @Override
     public List<File> listFiles(String rootDir) {
         List<File> fileList = new ArrayList<>();
@@ -97,6 +114,12 @@ public class JavaGrepImp implements JavaGrep {
 
     }
 
+    /***
+     * Recursively looks through each folder within a specified directory, and adds all file paths into a list
+     * @param rootPath the path to the starting folder
+     * @param fileList list of path files in string format
+     * @return fileList
+     */
     public List<File> traverse(File rootPath, List<File> fileList) {
         // if current item is a file, add to list, else call on method again
         File[] files = rootPath.listFiles();
@@ -112,6 +135,12 @@ public class JavaGrepImp implements JavaGrep {
         return fileList;
     }
 
+
+    /**
+     * Given a file, read the file contents and return a list of each line
+     * @param inputFile file to be read
+     * @return list where each index is one line in the file in String format
+     */
     @Override
     public List<String> readLines(File inputFile) {
         List<String> lines = new ArrayList<>();
@@ -129,6 +158,11 @@ public class JavaGrepImp implements JavaGrep {
         return lines;
     }
 
+    /***
+     * Checks whether a specified regex pattern is within a file line
+     * @param line string format of one row within the file
+     * @return true if the regex is within the line, and false otherwise
+     */
     @Override
     public boolean containsPattern(String line) {
         if (line != null) {
@@ -140,6 +174,10 @@ public class JavaGrepImp implements JavaGrep {
         return false;
     }
 
+    /***
+     * Write the list of matching lines to the specified output file
+     * @param lines string format of row within the file
+     */
     @Override
     public void writeToFile(List<String> lines) {
         try {
@@ -149,7 +187,7 @@ public class JavaGrepImp implements JavaGrep {
             }
             fileWrite.close();
         } catch (IOException e) {
-            System.out.println("An error occurred when writing to file");
+            this.logger.error("Failed to write to file");
         }
     }
 }

@@ -1,44 +1,73 @@
 # Introduction
-This is a Java application and its purpose is to mimic the Linux grep command. Given a directory, regular expresion, and an output file path, this application will recursively look through each folder within the specified directory. When it comes across a file, it will look through the contents of the file to see if it matches the inputted regex. When the patten matches, it writes that file path to the file the user requested the output in.
+This Java application is an implementation of a grep (Global Regular Expression Print) tool, which searches for lines within files that match a specified regular expression pattern. The application accepts three command-line arguments: the regular expression to search for, the root directory path where the search should begin, and the output file path where the matched lines will be written.
 
 # Quick Start
-First steps:
+To run the application, follow the below steps:
 ```bash
-# navigate to the correct directory
+# STEP 1: navigate to the correct directory #
 cd core_java/grep
 
-# run maven
+# STEP 2: run maven #
 mvn clean install
 
-# download the jar file
-wget -O grep-demo.jar https://github.com/jarviscanada/jarvis_data_eng_demo/raw/feature/grep_demo_jar/core_java/grep/target/grep-1.0-SNAPSHOT.jar
+# STEP 3: run application #
+# Approach 1: JAR File
+outfile=grep_$(date +%F_%T).txt
+
+java -cp target/grep-1.0-SNAPSHOT.jar ca.jrvs.apps.grep.JavaGrepImp ${regex_pattern} ${src_dir} ./out/${outfile}
+
+# Approach 2: Docker Container
+outfile=grep_$(date +%F_%T).txt
+
+docker run --rm \
+-v `pwd`/data:/data -v `pwd`/out:/out jrvs/grep \
+${regex_pattern} ${src_dir} /out/${outfile}
+```
+Keep in mind: regex_pattern and src_dir must be defined beforehand, or replaced with strings within the command.
+
+# Implementation 
+Here's a brief summary of the key components and functionality of the JavaGrepImp class: <br>
+
+1. It implements the JavaGrep interface, defining methods for setting and getting the regex pattern, root directory path, and output file path.
+2. The main method serves as the entry point of the application, where it validates the number of command-line arguments and sets up the JavaGrepImp instance with the provided arguments.
+3. The process method performs the top-level search workflow. It traverses through each file within the specified root directory, reads the content of each file, searches for lines matching the regex pattern, and writes the matched lines to the output file.
+4. The listFiles method recursively lists all files within a specified directory.
+5. The traverse method recursively traverses through directories and adds all file paths to a list.
+6. The readLines method reads the contents of a file and returns a list of lines.
+7. The containsPattern method checks whether a specified regex pattern is contained within a line.
+8. The writeToFile method writes the list of matching lines to the specified output file.
+
+# Test
+In order to determine the application is running as expected, manual testing can be completed by running the corresponding Linux command within your terminal. Logger will also indicate whether the application is running without disruptions. The command is as follows:
+```bash
+grep -Er ${regex_pattern} ${src_dir}
 ```
 
-To run the application against the test folder and its contents alongside the provided regex, run the following commands:
-
+### Example
+The below example was used for testing purposes:
 ```bash
 # define the 3 cmd line args
 regex_pattern=".*Romeo.*Juliet.*"
 src_dir="./data"
-outfile=grep_$(date +%F_%T).txt #change output filename each time it runs
+# changes output filename each time it runs so you can have a record of results
+outfile=grep_$(date +%F_%T).txt 
 
-# run the program
-#1
-java -jar grep-demo.jar ${regex_pattern} ${src_dir} ./out/${outfile}
-
-#2
-java -cp target/grep-1.0-SNAPSHOT.jar ca.jrvs.apps.grep.JavaGrepImp .*Romeo.*Juliet.* ./data ./out/grep_$(date +%F_%T).txt
-
-#3-memory option
-java -Xms5m -Xmx40m -cp target/grep-1.0-SNAPSHOT.jar ca.jrvs.apps.grep.JavaGrepImp .*Romeo.*Juliet.* ./data ./out/grep.txt
+# set the min and max heap size (optional)
+java -Xms5m -Xmx40m -cp target/grep-1.0-SNAPSHOT.jar ca.jrvs.apps.grep.JavaGrepImp ${regex_pattern} ${src_dir} ./out/${outfile}
 
 # view the results
 cat out/$outfile
 ```
 
-
-# Testing
-To test whether the application is running as expected, you can run the below command in your Linux terminal and see if it matches your output file:
+# Deployment
+Docker was used to dockerize the grep app, and GitHub was used for source code management. When running the application for the first time, make sure to pull the image from DockerHub:
 ```bash
-grep -Er ".*Romeo.*Juliet.*" ./data/txt
+docker/pull tharunii/grep
 ```
+
+# Improvement 
+1. Add grep options like --ignore-case and --max-count=NUM in the command line argument
+2. Make output more visually appealing with rows, columns and titles
+3. In the output file, include features: --line-number, --with-filename
+4. Include addtional features like the total count of matched lines, and a count for distinct matches
+
