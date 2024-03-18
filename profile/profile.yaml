@@ -89,7 +89,7 @@ professional_experience:
     company: "Jarvis"
     duration: "2024-present"
     # The project description must start with an action verb (https://bit.ly/3guO98u)
-    description: "I managed and created databases using SQL's CRUD operations, ensuring efficient data storage and retrieval. By employing Bash scripting, I streamlined manual tasks, enhancing overall workflow efficiency. Additionally, I developed internal applications in Java to aid teams in data processing, and utilized Python for comprehensive data analytics, leveraging libraries like Pandas, NumPy, and Matplotlib. Proficient in software development best practices, including Git version control and thorough code documentation, I collaborate within cross-functional teams to design solutions aligned with business objectives."
+    description: "I managed databases using SQL to ensure organized data storage and efficient manipulation, completing CRUD operations for smooth data retrieval. Employing Bash scripting, I automated routine tasks like system maintenance, enhancing overall workflow efficiency. Additionally, I developed Java applications collaboratively to improve firm-wide processes, including secure text-based searching of company documents, and conducted thorough data analytics using Python with libraries like Pandas, NumPy, and Matplotlib to inform strategic decision-making based on market trends."
   - title: "Applications Analyst"
     company: "Osler, Hoskin, and Harcourt LLP"
     duration: "2022"
