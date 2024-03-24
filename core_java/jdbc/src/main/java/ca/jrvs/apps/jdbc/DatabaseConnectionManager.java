@@ -6,13 +6,13 @@ import java.sql.*;
 import java.util.Properties;
 
 public class DatabaseConnectionManager {
-    private static final String configFile = "config.properties";
+    private static final String CONFIGFILE = "config.properties";
     private final String url;
     private final Properties properties;
 
-    public static String getProperty(String property, String configFile) {
+    public static String getProperty(String property) {
         Properties properties = new Properties();
-        try (InputStream inputStream = DatabaseConnectionManager.class.getClassLoader().getResourceAsStream(configFile)) {
+        try (InputStream inputStream = DatabaseConnectionManager.class.getClassLoader().getResourceAsStream(CONFIGFILE)) {
             properties.load(inputStream);
             return properties.getProperty(property);
         } catch (IOException e) {
@@ -22,9 +22,9 @@ public class DatabaseConnectionManager {
     }
 
     public DatabaseConnectionManager(String databaseName) {
-        String host = DatabaseConnectionManager.getProperty("psql.host", DatabaseConnectionManager.configFile);
-        String username = DatabaseConnectionManager.getProperty("psql.username", DatabaseConnectionManager.configFile);
-        String password = DatabaseConnectionManager.getProperty("psql.password", DatabaseConnectionManager.configFile);
+        String host = DatabaseConnectionManager.getProperty("psql.host");
+        String username = DatabaseConnectionManager.getProperty("psql.username");
+        String password = DatabaseConnectionManager.getProperty("psql.password");
 
         this.url = "jdbc:postgresql://"+host+"/"+databaseName;
         this.properties = new Properties();

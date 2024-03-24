@@ -14,14 +14,19 @@ import static ca.jrvs.apps.jdbc.JsonParser.*;
 public class QuoteHTTPHelper {
     private String apiKey;
     private OkHttpClient client;
-    private static final String configFile = "config.properties";
 
-    public static void main (String[] args) throws JsonProcessingException {
-        String symbol = "MSFT";
-        QuoteHTTPHelper qhh = new QuoteHTTPHelper();
-        Quote quote = qhh.fetchQuoteInfo(symbol);
-        System.out.println(toJson(quote, true, true));
+    public QuoteHTTPHelper() {
+        apiKey = DatabaseConnectionManager.getProperty("api.key");
+        client = new OkHttpClient();
+
     }
+
+//    public static void main (String[] args) throws JsonProcessingException {
+//        String symbol = "MSFT";
+//        QuoteHTTPHelper qhh = new QuoteHTTPHelper();
+//        Quote quote = qhh.fetchQuoteInfo(symbol);
+//        System.out.println(toJson(quote, true, true));
+//    }
 
     /**
      * Fetch latest quote data from Alpha Vantage endpoint
@@ -31,8 +36,6 @@ public class QuoteHTTPHelper {
      */
     // UNCOMMENT
     public Quote fetchQuoteInfo(String symbol) throws IllegalArgumentException {
-        apiKey = DatabaseConnectionManager.getProperty("api.key", configFile);
-        client = new OkHttpClient();
 
         Request request = new Request.Builder()
                 .url("https://alpha-vantage.p.rapidapi.com/query?function=GLOBAL_QUOTE&symbol="+symbol+"&datatype=json")
