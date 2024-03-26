@@ -19,4 +19,13 @@ public class Position {
     public double getValuePaid() { return valuePaid; }
 
     public void setValuePaid(double valuePaid) { this.valuePaid = valuePaid; }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "symbol='" + ticker + '\'' +
+                ", number_of_shares='" + numOfShares + '\'' +
+                ", value_paid='" + valuePaid + '\'' +
+                '}';
+    }
 }

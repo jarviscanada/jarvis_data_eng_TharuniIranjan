@@ -7,68 +7,81 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class JDBCExecutor {
+    public Connection connection;
 
-    public JDBCExecutor(String tableName, String requestType, String symbolName) {
-        String databaseName = "stock_quote";
+    public JDBCExecutor(String databaseName) {
         DatabaseConnectionManager dcm = new DatabaseConnectionManager(databaseName);
 
-
         try {
-            Connection connection = dcm.getConnection();
-            JDBCExecutor jdbc = new JDBCExecutor(tableName, requestType, symbolName);
-            if (tableName.equals("quote")) {
-                QuoteDao quoteDAO = new QuoteDao(connection);
-                if (requestType.equals("create")) {
-                    jdbc.createQuote(quoteDAO, symbolName);
-                } else if (requestType.equals("select")) {
-                    jdbc.readQuote(quoteDAO, symbolName);
-                } else if (requestType.equals("delete")) {
-                    jdbc.deleteQuote(quoteDAO, symbolName);
-                }
-            } 
+            connection = dcm.getConnection();
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
         }
-
-
     }
 
-    public void createQuote (QuoteDao qd, String s) throws JsonProcessingException {
+//    public static void main(String[] args) throws JsonProcessingException {
+//        JDBCExecutor jdbc = new JDBCExecutor("stock_quote");
+//        jdbc.readQuote("all");
+//        jdbc.createQuote("AAPL");
+//        jdbc.createQuote("MSFT");
+//        jdbc.readQuote("all");
+//        jdbc.deleteQuote("AAPL");
+//        jdbc.readQuote("all");
+//    }
+
+    public boolean doesExist(QuoteDao qd, String s) {
+        Optional<Quote> quoteO = qd.findById(s);
+        return quoteO.get().getSymbol() != null;
+    }
+
+    public void createQuote (String s) throws JsonProcessingException {
         // Create
+        QuoteDao quoteDAO = new QuoteDao(connection);
 
-        QuoteHTTPHelper qhh = new QuoteHTTPHelper();
-        Quote quote = qhh.fetchQuoteInfo(s);
-        qd.save(quote);
+        if (doesExist(quoteDAO, s)) {
+            System.out.println("Symbol already added");
+        } else {
+            QuoteHTTPHelper qhh = new QuoteHTTPHelper();
+            Quote quote = qhh.fetchQuoteInfo(s);
+            if (quote.getSymbol() != null) {
+                quoteDAO.save(quote);
+            } else {
+                System.out.println("Symbol does not exist");
+            }
+        }
     }
-    public void readQuote(QuoteDao qd, String s){
+    public void readQuote(String s){
+        QuoteDao quoteDAO = new QuoteDao(connection);
         if (s.equals("all")) {
             // Find all
-            Iterable<Quote> quoteI = qd.findAll();
+            Iterable<Quote> quoteI = quoteDAO.findAll();
             for (Quote q : quoteI) {
                 System.out.println(q.toString());
             }
         } else {
             // Find by ID
-            Optional<Quote> quoteO = qd.findById(s);
-
-            if (quoteO.isEmpty()) {
+            if (!doesExist(quoteDAO, s)) {
                 System.out.println("Symbol not found");
             } else {
+                Optional<Quote> quoteO = quoteDAO.findById(s);
                 System.out.println(quoteO.toString());
             }
         }
     }
-    public void deleteQuote(QuoteDao qd, String s){
+    public void deleteQuote(String s){
+        QuoteDao quoteDAO = new QuoteDao(connection);
         if (s.equals("all")) {
             // Delete all
-            qd.deleteAll();
+            quoteDAO.deleteAll();
 
         } else {
             // Delete by ID
-            qd.deleteById(s);
+            if (!doesExist(quoteDAO, s)) {
+                System.out.println("Symbol not found");
+            } else {
+                quoteDAO.deleteById(s);
+            }
         }
 
     }

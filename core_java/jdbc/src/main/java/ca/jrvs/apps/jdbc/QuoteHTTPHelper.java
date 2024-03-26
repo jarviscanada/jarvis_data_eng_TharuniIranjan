@@ -22,10 +22,10 @@ public class QuoteHTTPHelper {
     }
 
 //    public static void main (String[] args) throws JsonProcessingException {
-//        String symbol = "MSFT";
+//        String symbol = "AAPL";
 //        QuoteHTTPHelper qhh = new QuoteHTTPHelper();
 //        Quote quote = qhh.fetchQuoteInfo(symbol);
-//        System.out.println(toJson(quote, true, true));
+//        System.out.println(quote);
 //    }
 
     /**
