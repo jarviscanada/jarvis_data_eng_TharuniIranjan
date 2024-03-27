@@ -13,6 +13,14 @@ public interface CrudDao<T, ID> {
     T save(T entity) throws IllegalArgumentException;
 
     /**
+     * Saves a given entity. Used for create and update
+     * @param entity - must not be null
+     * @return The saved entity. Will never be null
+     * @throws IllegalArgumentException - if id is null
+     */
+    T update(T entity) throws IllegalArgumentException;
+
+    /**
      * Retrieves an entity by its id
      * @param id - must not be null
      * @return Entity with the given id or empty optional if none found

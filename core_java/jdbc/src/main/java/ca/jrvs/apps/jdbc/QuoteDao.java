@@ -17,6 +17,7 @@ public class QuoteDao implements CrudDao<Quote, String> {
     private static final String GET_ALL = "SELECT * FROM quote;";
     private static final String DELETE_ONE = "DELETE FROM quote WHERE symbol = ?";
     private static final String DELETE_ALL = "DELETE FROM quote";
+    private static final String UPDATE = "UPDATE quote SET open = ?, high = ?, low = ?, price = ?, volume = ?, latest_trading_day = ?, previous_close = ?, change = ?, change_percent = ? WHERE symbol = ?";
 
     public QuoteDao(Connection c) {
         this.c = c;
@@ -47,6 +48,45 @@ public class QuoteDao implements CrudDao<Quote, String> {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Quote update(Quote entity) throws IllegalArgumentException {
+
+        Quote quote = null;
+        try{
+            this.c.setAutoCommit(false);
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        try (PreparedStatement statement = this.c.prepareStatement(UPDATE);) {
+            statement.setDouble(1, convertStringToDouble(entity.getOpen()));
+            statement.setDouble(2, convertStringToDouble(entity.getHigh()));
+            statement.setDouble(3, convertStringToDouble(entity.getLow()));
+            statement.setDouble(4, convertStringToDouble(entity.getPrice()));
+            statement.setInt(5, convertStringToInt(entity.getVolume()));
+            statement.setDate(6, convertStringToDate(entity.getLatestTradingDay()));
+            statement.setDouble(7, convertStringToDouble(entity.getPreviousClose()));
+            statement.setDouble(8, convertStringToDouble(entity.getChange()));
+            statement.setString(9, entity.getChangePercent());
+            statement.setString(10, entity.getSymbol());
+            statement.execute();
+            this.c.commit();
+            quote = this.findById(entity.getSymbol()).get();
+        }catch(SQLException e){
+            try{
+                this.c.rollback();
+            }catch (SQLException sqle){
+                e.printStackTrace();
+                throw new RuntimeException(sqle);
+            }
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return quote;
     }
 
     @Override

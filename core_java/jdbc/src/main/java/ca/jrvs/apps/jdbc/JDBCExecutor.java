@@ -23,7 +23,7 @@ public class JDBCExecutor {
 //    public static void main(String[] args) throws JsonProcessingException {
 //        JDBCExecutor jdbc = new JDBCExecutor("stock_quote");
 //        jdbc.readQuote("all");
-//        jdbc.createQuote("AAPL");
+//        jdbc.createQuote("TSLA");
 //        jdbc.createQuote("MSFT");
 //        jdbc.readQuote("all");
 //        jdbc.deleteQuote("AAPL");
@@ -39,16 +39,18 @@ public class JDBCExecutor {
         // Create
         QuoteDao quoteDAO = new QuoteDao(connection);
 
-        if (doesExist(quoteDAO, s)) {
-            System.out.println("Symbol already added");
-        } else {
-            QuoteHTTPHelper qhh = new QuoteHTTPHelper();
-            Quote quote = qhh.fetchQuoteInfo(s);
-            if (quote.getSymbol() != null) {
-                quoteDAO.save(quote);
+        QuoteHTTPHelper qhh = new QuoteHTTPHelper();
+        Quote quote = qhh.fetchQuoteInfo(s);
+        // if the symbol is null it does not exist
+        if (quote.getSymbol() != null) {
+            // if the symbol is already in the quote db, make an update, else, create a new value
+            if (doesExist(quoteDAO, s)) {
+                quoteDAO.update(quote);
             } else {
-                System.out.println("Symbol does not exist");
+                quoteDAO.save(quote);
             }
+        } else {
+            System.out.println("Symbol does not exist");
         }
     }
     public void readQuote(String s){
