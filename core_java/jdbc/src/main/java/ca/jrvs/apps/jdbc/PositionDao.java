@@ -4,9 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static ca.jrvs.apps.jdbc.JsonParser.*;
+import static ca.jrvs.apps.jdbc.JsonParser.convertStringToDouble;
 
 
 public class PositionDao implements CrudDao<Position, String> {
@@ -17,6 +21,7 @@ public class PositionDao implements CrudDao<Position, String> {
     private static final String GET_ALL = "SELECT * FROM position;";
     private static final String DELETE_ONE = "DELETE FROM position WHERE symbol=?";
     private static final String DELETE_ALL = "DELETE FROM position";
+    private static final String UPDATE = "UPDATE position SET number_of_shares = ?, value_paid = ? WHERE symbol = ?";
 
     public PositionDao(Connection c) {
         this.c = c;
@@ -36,6 +41,35 @@ public class PositionDao implements CrudDao<Position, String> {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Position update(Position entity) throws IllegalArgumentException {
+        Position position = null;
+        try{
+            this.c.setAutoCommit(false);
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        try (PreparedStatement statement = this.c.prepareStatement(UPDATE);) {
+            statement.setInt(1, entity.getNumOfShares());
+            statement.setDouble(2, entity.getValuePaid());
+            statement.setString(3, entity.getTicker());
+            statement.execute();
+            this.c.commit();
+            position = this.findById(entity.getTicker()).get();
+        }catch(SQLException e){
+            try{
+                this.c.rollback();
+            }catch (SQLException sqle){
+                e.printStackTrace();
+                throw new RuntimeException(sqle);
+            }
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return position;
     }
 
     @Override
