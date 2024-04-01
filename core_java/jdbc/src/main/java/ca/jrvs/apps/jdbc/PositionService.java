@@ -26,18 +26,19 @@ public class PositionService {
 
 //    public static void main(String[] args) {
 //        PositionService ps = new PositionService();
+//        ps.dao.deleteAll();
 //        ps.buy("AAPL", 4, 170.9);
 //        System.out.println(ps.dao.findAll());
 //        ps.sell("AAPL");
 //        System.out.println(ps.dao.findAll());
 //    }
 
-    public double calculateValuePaid(int numShares, double price, double oldValue) {
+    public double updateValue(int numShares, double price, double oldValue) {
         return (numShares*price)+oldValue;
     }
 
     public boolean isValidShares(int maxAmount, int purchaseAmount) {
-        return purchaseAmount <= maxAmount;
+        return purchaseAmount < Integer.MAX_VALUE && purchaseAmount <= maxAmount;
     }
 
     public boolean doesExist(PositionDao pd, String s) {
@@ -57,35 +58,38 @@ public class PositionService {
         QuoteService qs = new QuoteService();
         Optional<Quote> quote = qs.fetchQuoteDataFromAPI(ticker);
 
-        if (quote.get().getSymbol() == null) {
+        // check if it is a valid symbol
+        if (quote.isEmpty()) {
             System.out.println("Symbol does not exist");
             return position;
         }
 
         String symbol = quote.get().getSymbol();
+
+        // check if the number of shares entered is less than the total amount of shares
         int volume = convertStringToInt(quote.get().getVolume());
-
-
         if (!isValidShares(volume, numberOfShares)) {
             System.out.println("Invalid amount of shares");
             return position;
         }
 
-
         // if the symbol is already in the position db, make an update, else, create a new value
-        position.setTicker(symbol);
         if (doesExist(dao, ticker)) {
             Position existingPos = dao.findById(ticker).get();
-            position.setNumOfShares(numberOfShares + existingPos.getNumOfShares());
-            if (!isValidShares(volume, position.getNumOfShares())) {
+            int newShares = (int) updateValue(numberOfShares, 1, existingPos.getNumOfShares());
+
+            if (!isValidShares(volume, newShares)) {
                 System.out.println("Invalid amount of shares");
-                return existingPos;
+                return position;
             }
-            position.setValuePaid(calculateValuePaid(numberOfShares, price, existingPos.getValuePaid()));
+            position.setTicker(symbol);
+            position.setNumOfShares(newShares);
+            position.setValuePaid(updateValue(numberOfShares, price, existingPos.getValuePaid()));
             dao.update(position);
         } else {
+            position.setTicker(symbol);
             position.setNumOfShares(numberOfShares);
-            position.setValuePaid(calculateValuePaid(numberOfShares, price, 0));
+            position.setValuePaid(updateValue(numberOfShares, price, 0));
             dao.save(position);
         }
 
