@@ -1,13 +1,16 @@
 package ca.jrvs.apps.jdbc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
 
 public class QuoteService {
-    private QuoteDao dao;
-    private QuoteHTTPHelper httpHelper;
+
     public Connection connection;
+    private static Logger logger = LoggerFactory.getLogger(QuoteService.class);
 
     public boolean doesExist(QuoteDao qd, String s) {
         Optional<Quote> quoteO = qd.findById(s);
@@ -38,11 +41,12 @@ public class QuoteService {
                 return Optional.of(quote);
             }
 
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Failed to write to Quote table for symbol " + ticker + " in QuoteService. " +
+                    "SQL error in quoteDAO-> " + e);
         }
         // return an empty quote if there's a failure
+        logger.warn("Could not find symbol " + ticker + ". fetchQuoteInfo returned empty Quote.");
         return Optional.empty();
     }
 

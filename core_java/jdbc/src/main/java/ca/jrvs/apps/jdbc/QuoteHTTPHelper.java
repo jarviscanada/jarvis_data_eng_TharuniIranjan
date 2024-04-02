@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.http.HttpTimeoutException;
@@ -14,11 +16,11 @@ import static ca.jrvs.apps.jdbc.JsonParser.*;
 public class QuoteHTTPHelper {
     private String apiKey;
     private OkHttpClient client;
+    private static Logger logger = LoggerFactory.getLogger(QuoteHTTPHelper.class);
 
     public QuoteHTTPHelper() {
         apiKey = DatabaseConnectionManager.getProperty("api.key");
         client = new OkHttpClient();
-
     }
 
     /**
@@ -42,13 +44,13 @@ public class QuoteHTTPHelper {
             return toObjectFromJson(responseBody, Quote.class);
 
         } catch (HttpTimeoutException e) {
-            e.printStackTrace();
+            logger.error("HttpTimeout error when trying fetchQuoteInfo against symbol " + symbol + "-> " + e);
         } catch (JsonMappingException e) {
-            e.printStackTrace();
+            logger.error("JsonMapping error when trying fetchQuoteInfo against symbol " + symbol + "-> " + e);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            logger.error("JsonProcessing error when trying fetchQuoteInfo against symbol " + symbol + "-> " + e);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("IO error when trying fetchQuoteInfo against symbol " + symbol + "-> " + e);
         }
         return null;
     }

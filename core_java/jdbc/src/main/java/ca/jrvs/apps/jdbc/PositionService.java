@@ -1,5 +1,8 @@
 package ca.jrvs.apps.jdbc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
@@ -7,13 +10,18 @@ import java.util.Optional;
 import static ca.jrvs.apps.jdbc.JsonParser.convertStringToDouble;
 import static ca.jrvs.apps.jdbc.JsonParser.convertStringToInt;
 
+/***
+ * Handles services for position: adding new/updating old positions, deleting one/all position, viewing one/all
+ */
 public class PositionService {
     private PositionDao positionDao;
 
     public Connection connection;
     public QuoteDao quoteDao;
+    private static Logger logger = LoggerFactory.getLogger(PositionDao.class);
 
     public PositionService() {
+        // establish connection
         DatabaseConnectionManager dcm = new DatabaseConnectionManager();
 
         try {
@@ -22,21 +30,8 @@ public class PositionService {
             quoteDao = new QuoteDao(connection);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("SQL error when PositionService tried connecting to db-> " + e);
         }
-    }
-
-    public double updateValue(int numShares, double price, double oldValue) {
-        return (numShares*price)+oldValue;
-    }
-
-    public boolean isValidShares(int maxAmount, int purchaseAmount) {
-        return purchaseAmount >= 0 && purchaseAmount < Integer.MAX_VALUE && purchaseAmount <= maxAmount;
-    }
-
-    public boolean doesExist(PositionDao pd, String s) {
-        Optional<Position> posO = pd.findById(s);
-        return posO.get().getTicker() != null;
     }
 
     /**
@@ -53,6 +48,7 @@ public class PositionService {
 
         // check if it is a valid symbol
         if (quote.isEmpty()) {
+            logger.warn("Could not buy symbol " + ticker + ". fetchQuoteDataFromAPI returned empty Quote.");
             return position;
         }
 
@@ -62,6 +58,7 @@ public class PositionService {
         int volume = convertStringToInt(quote.get().getVolume());
         if (!isValidShares(volume, numberOfShares)) {
             System.out.println("Invalid amount of shares");
+            logger.warn("Could not buy symbol " + ticker + ". User inputted invalid shares amount.");
             return position;
         }
 
@@ -73,6 +70,7 @@ public class PositionService {
 
             if (!isValidShares(volume, newShares)) {
                 System.out.println("Invalid amount of shares");
+                logger.warn("Could not buy symbol " + ticker + ". User inputted invalid shares amount.");
                 return position;
             }
             position.setTicker(symbol);
@@ -94,11 +92,32 @@ public class PositionService {
      * @param ticker
      */
     public void sell(String ticker) {
-        if (!doesExist(positionDao, ticker)) {
-            System.out.println("Symbol not found");
-        } else {
+        if (doesExist(positionDao, ticker)) {
             positionDao.deleteById(ticker);
+        } else {
+            logger.warn("Could not sell symbol " + ticker + ". doesExist returned false.");
         }
+    }
+
+    /**
+     * quick checks and updates to values that will be passed into the db
+     * @params numShares, price, oldValue
+     * @params maxAmount, purchaseAmount
+     * @params PositionDao, String
+     * @returns computed integer, boolean
+     */
+
+    public double updateValue(int numShares, double price, double oldValue) {
+        return (numShares*price)+oldValue;
+    }
+
+    public boolean isValidShares(int maxAmount, int purchaseAmount) {
+        return purchaseAmount >= 0 && purchaseAmount < Integer.MAX_VALUE && purchaseAmount <= maxAmount;
+    }
+
+    public boolean doesExist(PositionDao pd, String s) {
+        Optional<Position> posO = pd.findById(s);
+        return posO.get().getTicker() != null;
     }
 
 }

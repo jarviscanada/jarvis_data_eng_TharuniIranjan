@@ -1,5 +1,8 @@
 package ca.jrvs.apps.jdbc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.*;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -16,11 +19,11 @@ public class QuoteDao implements CrudDao<Quote, String> {
     private static final String DELETE_ONE = "DELETE FROM quote WHERE symbol = ?";
     private static final String DELETE_ALL = "DELETE FROM quote";
     private static final String UPDATE = "UPDATE quote SET open = ?, high = ?, low = ?, price = ?, volume = ?, latest_trading_day = ?, previous_close = ?, change = ?, change_percent = ? WHERE symbol = ?";
+    private static Logger logger = LoggerFactory.getLogger(QuoteDao.class);
 
     public QuoteDao(Connection c) {
         this.c = c;
     }
-
 
     @Override
     public Quote save(Quote entity) throws IllegalArgumentException {
@@ -41,7 +44,7 @@ public class QuoteDao implements CrudDao<Quote, String> {
 
             return null;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Failed to execute SQL statement for save against quote '" + entity + "' in QuoteDao-> " + e);
             throw new RuntimeException(e);
         } catch (ParseException e) {
             throw new RuntimeException(e);
@@ -51,11 +54,11 @@ public class QuoteDao implements CrudDao<Quote, String> {
     @Override
     public Quote update(Quote entity) throws IllegalArgumentException {
 
-        Quote quote = null;
+        Quote quote;
         try{
             this.c.setAutoCommit(false);
         }catch(SQLException e){
-            e.printStackTrace();
+            logger.error("Failed to set AutoCommit for update against quote '" + entity + "' in QuoteDao-> " + e);
             throw new RuntimeException(e);
         }
         try (PreparedStatement statement = this.c.prepareStatement(UPDATE);) {
@@ -76,12 +79,13 @@ public class QuoteDao implements CrudDao<Quote, String> {
             try{
                 this.c.rollback();
             }catch (SQLException sqle){
-                e.printStackTrace();
+                logger.error("Failed to do rollback for update against quote '" + entity + "' in QuoteDao-> " + sqle);
                 throw new RuntimeException(sqle);
             }
-            e.printStackTrace();
+            logger.error("Failed to execute SQL statement for update against quote '" + entity + "' in QuoteDao-> " + e);
             throw new RuntimeException(e);
         } catch (ParseException e) {
+            logger.error("Failed to parse for update against quote '" + entity + "' in QuoteDao-> " + e);
             throw new RuntimeException(e);
         }
         return quote;
@@ -109,7 +113,7 @@ public class QuoteDao implements CrudDao<Quote, String> {
 
             return Optional.of(quote);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Failed to execute SQL statement for findByID against quote symbol '" + s + "' in QuoteDao-> " + e);
             throw new RuntimeException(e);
         }
     }
@@ -138,7 +142,7 @@ public class QuoteDao implements CrudDao<Quote, String> {
 
             return listOfQuotes;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Failed to execute SQL statement for findAll quotes in QuoteDao-> " + e);
             throw new RuntimeException(e);
         }
 
@@ -152,7 +156,7 @@ public class QuoteDao implements CrudDao<Quote, String> {
             statement.execute();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Failed to execute SQL statement for deleteByID against quote symbol '" + s + "' in QuoteDao-> " + e);
             throw new RuntimeException(e);
         }
 
@@ -164,7 +168,7 @@ public class QuoteDao implements CrudDao<Quote, String> {
             statement.execute();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Failed to execute SQL statement for deleteAll quotes in QuoteDao-> " + e);
             throw new RuntimeException(e);
         }
 

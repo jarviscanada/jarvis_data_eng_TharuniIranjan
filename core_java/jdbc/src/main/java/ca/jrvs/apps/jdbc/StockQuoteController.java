@@ -1,7 +1,11 @@
 package ca.jrvs.apps.jdbc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -19,6 +23,7 @@ public class StockQuoteController {
     public PositionService positionService;
     public int apiCalls;
     public int API_LIMIT = 6;
+    private static Logger logger = LoggerFactory.getLogger(StockQuoteController.class);
 
     /**
      * Creates the necessary method calls according to user input
@@ -34,10 +39,12 @@ public class StockQuoteController {
         dbConnect();
 
         // Keep asking user what type of service they want as long as they don't type q to quit
+        logger.info("Starting Application");
         while (!requestType.equals("q")) {
             System.out.print("\nEnter service request: ");
             request = myObj.nextLine().split(" ");
             requestType = request[0];
+            logger.info("*Processing request '" + Arrays.toString(request) + "'");
 
             switch (requestType) {
                 case "i" -> instructions();
@@ -48,6 +55,7 @@ public class StockQuoteController {
                 default -> System.out.print("Invalid request type");
             }
         }
+        logger.info("Exiting Application");
     }
 
     /***
@@ -114,12 +122,15 @@ public class StockQuoteController {
                     apiCalls += 1;
                     if (newQuote.getSymbol() == null) {
                         System.out.println("Symbol does not exist");
+                        logger.warn("Could not process view request: fetchQuoteInfo returned an empty Quote.");
                     } else {
                         System.out.println("STOCK INFO");
                         System.out.println(newQuote);
+                        logger.info("Successfully processed view request.");
                     }
                 } else {
                     System.out.println("Reached daily limit. Cannot view/buy new stocks at the moment.");
+                    logger.warn("Could not process view request: reached daily API limit.");
                 }
 
             // old means user wants to look at the stock info that has been stored in the db based off their purchases
@@ -132,6 +143,7 @@ public class StockQuoteController {
                     for (Quote q: quoteList) { System.out.println(q);}
                     System.out.println("\nPURCHASE INFO");
                     for (Position p: positionList) { System.out.println(p);}
+                    logger.info("Successfully processed view request.");
 
                 } else {
                     // find a particular stock in the db and prin the Quote and Position
@@ -142,17 +154,20 @@ public class StockQuoteController {
                         System.out.println(qd.get());
                         System.out.println("\nPURCHASE INFO");
                         System.out.println(pd.get());
+                        logger.info("Successfully processed view request.");
                     } else {
                         System.out.println("This stock has not been purchased");
+                        logger.warn("Could not process view request: findById returned an empty Position for symbol " + symbol);
                     }
                 }
-
             } else {
-                System.out.println("Invalid type. Please enter 'old' or 'new'");
+                System.out.println("Invalid view type. Please enter 'old' or 'new'");
+                logger.warn("Could not process view request: view type '" + type + "' was entered instead of 'new' or 'old'");
             }
 
         } else {
             System.out.println("Insufficient number of inputs");
+            logger.warn("Could not process view request: too many/too little arguments");
         }
     }
 
@@ -179,17 +194,23 @@ public class StockQuoteController {
                         System.out.println("Purchase Complete");
                         System.out.println("\nPURCHASE INFO");
                         System.out.println(newPosition);
+                        logger.info("Successfully processed buy request.");
                     } else {
                         System.out.println("Unable to retrieve stock information. Please ensure symbol was entered correctly");
+                        logger.warn("Could not process buy request: positionService.buy returned an empty Position.");
+
                     }
                 } else {
                     System.out.println("Invalid purchase amount. Please enter positive whole numbers");
+                    logger.warn("Could not process buy request: shares inputted was negative/decimal number.");
                 }
             } else {
                 System.out.println("Reached daily limit. Cannot view/buy new stocks.");
+                logger.warn("Could not process buy request: reached daily API limit.");
             }
         } else {
             System.out.println("Insufficient number of inputs");
+            logger.warn("Could not process buy request: too many/too little arguments");
         }
     }
 
@@ -211,6 +232,7 @@ public class StockQuoteController {
                     positionDao.deleteAll();
                     quoteDao.deleteAll();
                     System.out.println("POS Complete");
+                    logger.info("Successfully processed view request.");
                 } else {
                     Optional<Position> deletePosition = positionDao.findById(symbol);
 
@@ -218,15 +240,19 @@ public class StockQuoteController {
                         positionService.sell(symbol);
                         quoteDao.deleteById(symbol);
                         System.out.println("POS Complete");
+                        logger.info("Successfully processed sell request.");
                     } else {
                         System.out.println("This stock has not been purchased to sell");
+                        logger.warn("Could not process sell request: positionDao.findById() returned empty Position");
                     }
                 }
             } else if (!shouldSell.equals("n")) {
                 System.out.println("Invalid input");
+                logger.warn("Could not process sell request: did not enter y/n when confirming sale");
             }
         } else {
             System.out.println("Insufficient number of inputs");
+            logger.warn("Could not process sell request: too many/too little arguments");
         }
     }
 }

@@ -1,20 +1,19 @@
 package ca.jrvs.apps.jdbc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static ca.jrvs.apps.jdbc.JsonParser.*;
-import static ca.jrvs.apps.jdbc.JsonParser.convertStringToDouble;
 
 
 public class PositionDao implements CrudDao<Position, String> {
-
     private Connection c;
     private static final String INSERT = "INSERT INTO position (symbol, number_of_shares, value_paid) VALUES (?, ?, ?);";
     private static final String GET_ONE = "SELECT * FROM position WHERE symbol=?;";
@@ -22,6 +21,8 @@ public class PositionDao implements CrudDao<Position, String> {
     private static final String DELETE_ONE = "DELETE FROM position WHERE symbol=?";
     private static final String DELETE_ALL = "DELETE FROM position";
     private static final String UPDATE = "UPDATE position SET number_of_shares = ?, value_paid = ? WHERE symbol = ?";
+    private static Logger logger = LoggerFactory.getLogger(PositionDao.class);
+
 
     public PositionDao(Connection c) {
         this.c = c;
@@ -38,18 +39,18 @@ public class PositionDao implements CrudDao<Position, String> {
 
             return null;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Failed to execute SQL statement for save against position '" + entity + "' in PositionDao-> " + e);
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public Position update(Position entity) throws IllegalArgumentException {
-        Position position = null;
+        Position position;
         try{
             this.c.setAutoCommit(false);
         }catch(SQLException e){
-            e.printStackTrace();
+            logger.error("Failed to set AutoCommit for update against position '" + entity + "' in PositionDao-> " + e);
             throw new RuntimeException(e);
         }
         try (PreparedStatement statement = this.c.prepareStatement(UPDATE);) {
@@ -63,10 +64,10 @@ public class PositionDao implements CrudDao<Position, String> {
             try{
                 this.c.rollback();
             }catch (SQLException sqle){
-                e.printStackTrace();
+                logger.error("Failed to execute SQL statement for update against position '" + entity + "' in PositionDao-> " + e);
                 throw new RuntimeException(sqle);
             }
-            e.printStackTrace();
+            logger.error("Failed to execute SQL statement for update against position '" + entity + "' in PositionDao-> " + e);
             throw new RuntimeException(e);
         }
         return position;
@@ -87,7 +88,7 @@ public class PositionDao implements CrudDao<Position, String> {
 
             return Optional.of(position);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Failed to execute SQL statement for findByID against position symbol '" + s + "' in PositionDao-> " + e);
             throw new RuntimeException(e);
         }
     }
@@ -104,13 +105,12 @@ public class PositionDao implements CrudDao<Position, String> {
                 position.setNumOfShares(resultSet.getInt(2));
                 position.setValuePaid(resultSet.getDouble(3));
 
-
                 listOfPositions.add(position);
             }
 
             return listOfPositions;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Failed to execute SQL statement for findAll positions in PositionDao-> " + e);
             throw new RuntimeException(e);
         }
 
@@ -123,7 +123,7 @@ public class PositionDao implements CrudDao<Position, String> {
             statement.execute();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Failed to execute SQL statement for deleteByID against position symbol '" + s + "' in PositionDao-> " + e);
             throw new RuntimeException(e);
         }
     }
@@ -134,7 +134,7 @@ public class PositionDao implements CrudDao<Position, String> {
             statement.execute();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Failed to execute SQL statement for deleteAll positions in PositionDao-> " + e);
             throw new RuntimeException(e);
         }
     }
