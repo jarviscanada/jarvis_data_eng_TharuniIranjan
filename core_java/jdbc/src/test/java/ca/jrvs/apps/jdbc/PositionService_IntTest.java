@@ -13,24 +13,17 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PositionService_IntTest {
-    public String databaseName = "stock_quote";
     public DatabaseConnectionManager dcm;
     public Connection c;
-
     public QuoteDao quoteDao;
-    public QuoteDao mockQuoteDao;
-    public QuoteHTTPHelper qhh;
-    public QuoteService mockQS = new QuoteService();
-    public QuoteService qs = new QuoteService();
     public Quote msftQuote = new Quote();
-    public Quote emptyQuote = new Quote();
 
 
     public PositionDao positionDao;
     public PositionService ps = new PositionService();
-    public PositionService mockPS = new PositionService();
 
     public Position msftPosition = new Position();
     public String msftSymbol = "MSFT";
@@ -55,7 +48,7 @@ public class PositionService_IntTest {
 
     @Before
     public void init() throws SQLException {
-        dcm = new DatabaseConnectionManager(databaseName);
+        dcm = new DatabaseConnectionManager();
         c = dcm.getConnection();
 
         positionDao = new PositionDao(c);
@@ -132,6 +125,15 @@ public class PositionService_IntTest {
         assertEquals(msftPos2.getTicker(), emptyPosition.getTicker());
         assertEquals(msftPos2.getNumOfShares(), emptyPosition.getNumOfShares());
         assertEquals(msftPos2.getValuePaid(), emptyPosition.getValuePaid(), 0.0001);
+    }
+
+    @Test
+    public void test_sell() {
+        ps.sell(msftSymbol);
+        assertFalse(ps.doesExist(positionDao, msftSymbol));
+
+        ps.sell(fakeSymbol);
+        assertFalse(ps.doesExist(positionDao, fakeSymbol));
     }
 
 }

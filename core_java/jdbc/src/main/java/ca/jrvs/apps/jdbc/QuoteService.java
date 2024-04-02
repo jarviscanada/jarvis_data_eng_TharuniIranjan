@@ -8,7 +8,6 @@ public class QuoteService {
     private QuoteDao dao;
     private QuoteHTTPHelper httpHelper;
     public Connection connection;
-    public String databaseName = "stock_quote";
 
     public boolean doesExist(QuoteDao qd, String s) {
         Optional<Quote> quoteO = qd.findById(s);
@@ -21,7 +20,7 @@ public class QuoteService {
      * @return Latest quote information or empty optional if ticker symbol not found
      */
     public Optional<Quote> fetchQuoteDataFromAPI(String ticker) {
-        DatabaseConnectionManager dcm = new DatabaseConnectionManager(databaseName);
+        DatabaseConnectionManager dcm = new DatabaseConnectionManager();
 
         try {
             connection = dcm.getConnection();

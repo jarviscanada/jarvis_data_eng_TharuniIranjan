@@ -7,38 +7,30 @@ import java.util.Optional;
 import static ca.jrvs.apps.jdbc.JsonParser.convertStringToInt;
 
 public class PositionService {
-    private PositionDao dao;
+    private PositionDao positionDao;
 
     public Connection connection;
-    public String databaseName = "stock_quote";
+    public QuoteDao quoteDao;
 
     public PositionService() {
-        DatabaseConnectionManager dcm = new DatabaseConnectionManager(databaseName);
+        DatabaseConnectionManager dcm = new DatabaseConnectionManager();
 
         try {
             connection = dcm.getConnection();
-            dao = new PositionDao(connection);
+            positionDao = new PositionDao(connection);
+            quoteDao = new QuoteDao(connection);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-//    public static void main(String[] args) {
-//        PositionService ps = new PositionService();
-//        ps.dao.deleteAll();
-//        ps.buy("AAPL", 4, 170.9);
-//        System.out.println(ps.dao.findAll());
-//        ps.sell("AAPL");
-//        System.out.println(ps.dao.findAll());
-//    }
-
     public double updateValue(int numShares, double price, double oldValue) {
         return (numShares*price)+oldValue;
     }
 
     public boolean isValidShares(int maxAmount, int purchaseAmount) {
-        return purchaseAmount < Integer.MAX_VALUE && purchaseAmount <= maxAmount;
+        return purchaseAmount >= 0 && purchaseAmount < Integer.MAX_VALUE && purchaseAmount <= maxAmount;
     }
 
     public boolean doesExist(PositionDao pd, String s) {
@@ -60,7 +52,7 @@ public class PositionService {
 
         // check if it is a valid symbol
         if (quote.isEmpty()) {
-            System.out.println("Symbol does not exist");
+            System.out.println("Unable to retrieve stock information. Please ensure symbol was entered correctly");
             return position;
         }
 
@@ -74,8 +66,8 @@ public class PositionService {
         }
 
         // if the symbol is already in the position db, make an update, else, create a new value
-        if (doesExist(dao, ticker)) {
-            Position existingPos = dao.findById(ticker).get();
+        if (doesExist(positionDao, ticker)) {
+            Position existingPos = positionDao.findById(ticker).get();
             int newShares = (int) updateValue(numberOfShares, 1, existingPos.getNumOfShares());
 
             if (!isValidShares(volume, newShares)) {
@@ -85,12 +77,12 @@ public class PositionService {
             position.setTicker(symbol);
             position.setNumOfShares(newShares);
             position.setValuePaid(updateValue(numberOfShares, price, existingPos.getValuePaid()));
-            dao.update(position);
+            positionDao.update(position);
         } else {
             position.setTicker(symbol);
             position.setNumOfShares(numberOfShares);
             position.setValuePaid(updateValue(numberOfShares, price, 0));
-            dao.save(position);
+            positionDao.save(position);
         }
 
         return position;
@@ -101,10 +93,10 @@ public class PositionService {
      * @param ticker
      */
     public void sell(String ticker) {
-        if (!doesExist(dao, ticker)) {
+        if (!doesExist(positionDao, ticker)) {
             System.out.println("Symbol not found");
         } else {
-            dao.deleteById(ticker);
+            positionDao.deleteById(ticker);
         }
     }
 

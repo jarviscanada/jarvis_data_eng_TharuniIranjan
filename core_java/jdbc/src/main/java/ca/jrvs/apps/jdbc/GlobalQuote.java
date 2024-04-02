@@ -87,17 +87,15 @@ public class GlobalQuote {
 
     @Override
     public String toString() {
-        return "GlobalQuote{" +
-                "symbol='" + symbol + '\'' +
-                ", open='" + open + '\'' +
-                ", high='" + high + '\'' +
-                ", low='" + low + '\'' +
-                ", price='" + price + '\'' +
-                ", volume='" + volume + '\'' +
-                ", latestTradingDay='" + latestTradingDay + '\'' +
-                ", previousClose='" + previousClose + '\'' +
-                ", change='" + change + '\'' +
-                ", changePercent='" + changePercent + '\'' +
-                '}';
+        return "symbol: " + symbol +
+                ", open: " + open +
+                ", high: " + high +
+                ", low: " + low +
+                ", price: " + price +
+                ", volume: " + volume +
+                ", latest trading day: " + latestTradingDay +
+                ", previous close: " + previousClose +
+                ", change: " + change +
+                ", change percent: " + changePercent;
     }
 }
