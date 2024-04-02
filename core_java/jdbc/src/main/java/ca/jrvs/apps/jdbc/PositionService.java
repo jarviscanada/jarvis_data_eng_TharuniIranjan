@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
 
+import static ca.jrvs.apps.jdbc.JsonParser.convertStringToDouble;
 import static ca.jrvs.apps.jdbc.JsonParser.convertStringToInt;
 
 public class PositionService {
@@ -52,7 +53,6 @@ public class PositionService {
 
         // check if it is a valid symbol
         if (quote.isEmpty()) {
-            System.out.println("Unable to retrieve stock information. Please ensure symbol was entered correctly");
             return position;
         }
 
@@ -66,6 +66,7 @@ public class PositionService {
         }
 
         // if the symbol is already in the position db, make an update, else, create a new value
+        double stockPrice = convertStringToDouble(quote.get().getPrice());
         if (doesExist(positionDao, ticker)) {
             Position existingPos = positionDao.findById(ticker).get();
             int newShares = (int) updateValue(numberOfShares, 1, existingPos.getNumOfShares());
@@ -76,12 +77,12 @@ public class PositionService {
             }
             position.setTicker(symbol);
             position.setNumOfShares(newShares);
-            position.setValuePaid(updateValue(numberOfShares, price, existingPos.getValuePaid()));
+            position.setValuePaid(updateValue(numberOfShares, stockPrice, existingPos.getValuePaid()));
             positionDao.update(position);
         } else {
             position.setTicker(symbol);
             position.setNumOfShares(numberOfShares);
-            position.setValuePaid(updateValue(numberOfShares, price, 0));
+            position.setValuePaid(updateValue(numberOfShares, stockPrice, 0));
             positionDao.save(position);
         }
 
