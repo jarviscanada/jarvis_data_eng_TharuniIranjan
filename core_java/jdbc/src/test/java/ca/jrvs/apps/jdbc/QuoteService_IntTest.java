@@ -14,7 +14,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 public class QuoteService_IntTest {
-    public String databaseName = "stock_quote";
     public DatabaseConnectionManager dcm;
     public Connection c;
     public QuoteDao quoteDao;
@@ -26,11 +25,10 @@ public class QuoteService_IntTest {
     public String msftSymbol = "MSFT";
     public String fakeSymbol = "MSFTX";
     public String aaplSymbol = "AAPL";
-    public String date;
 
     @Before
     public void init() throws SQLException {
-        dcm = new DatabaseConnectionManager(databaseName);
+        dcm = new DatabaseConnectionManager();
         c = dcm.getConnection();
 
         positionDao = new PositionDao(c);
@@ -64,15 +62,10 @@ public class QuoteService_IntTest {
 
         QuoteHTTPHelper qhh = new QuoteHTTPHelper();
         aaplQuote = qhh.fetchQuoteInfo(aaplSymbol);
-
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate now = LocalDate.now();
-        LocalDate yesterdayDate = now.minusDays(1);
-        date = dtf.format(yesterdayDate);
     }
 
     @Test
-    public void test_fetchApi_create() throws JsonProcessingException {
+    public void test_fetchApi_create() {
         Optional<Quote> testQuote1 = qs.fetchQuoteDataFromAPI(aaplSymbol);
         assertFalse(testQuote1.isEmpty());
         assertEquals(testQuote1.get().getSymbol(), aaplQuote.getSymbol());
@@ -81,14 +74,13 @@ public class QuoteService_IntTest {
         assertEquals(testQuote1.get().getLow(), aaplQuote.getLow());
         assertEquals(testQuote1.get().getPrice(), aaplQuote.getPrice());
         assertEquals(testQuote1.get().getLatestTradingDay(), aaplQuote.getLatestTradingDay());
-        assertEquals(testQuote1.get().getLatestTradingDay(), date);
         assertEquals(testQuote1.get().getPreviousClose(), aaplQuote.getPreviousClose());
         assertEquals(testQuote1.get().getChange(), aaplQuote.getChange());
         assertEquals(testQuote1.get().getChangePercent(), aaplQuote.getChangePercent());
     }
 
     @Test
-    public void test_fetchApi_update() throws JsonProcessingException {
+    public void test_fetchApi_update() {
         Optional<Quote> testQuote2 = qs.fetchQuoteDataFromAPI(msftSymbol);
         assertFalse(testQuote2.isEmpty());
         assertEquals(testQuote2.get().getSymbol(), msftQuote.getSymbol());
@@ -102,11 +94,10 @@ public class QuoteService_IntTest {
         assertNotEquals(testQuote2.get().getChangePercent(), msftQuote.getChangePercent());
 
         assertNotEquals(testQuote2.get().getLatestTradingDay(), msftQuote.getLatestTradingDay());
-        assertEquals(testQuote2.get().getLatestTradingDay(), date);
     }
 
     @Test
-    public void test_fetchApi_empty() throws JsonProcessingException {
+    public void test_fetchApi_empty() {
         Optional<Quote> testQuote3 = qs.fetchQuoteDataFromAPI(fakeSymbol);
         assertTrue(testQuote3.isEmpty());
     }

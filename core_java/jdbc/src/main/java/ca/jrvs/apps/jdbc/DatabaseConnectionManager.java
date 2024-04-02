@@ -21,10 +21,11 @@ public class DatabaseConnectionManager {
         }
     }
 
-    public DatabaseConnectionManager(String databaseName) {
+    public DatabaseConnectionManager() {
         String host = DatabaseConnectionManager.getProperty("psql.host");
         String username = DatabaseConnectionManager.getProperty("psql.username");
         String password = DatabaseConnectionManager.getProperty("psql.password");
+        String databaseName = DatabaseConnectionManager.getProperty("psql.database");
 
         this.url = "jdbc:postgresql://"+host+"/"+databaseName;
         this.properties = new Properties();

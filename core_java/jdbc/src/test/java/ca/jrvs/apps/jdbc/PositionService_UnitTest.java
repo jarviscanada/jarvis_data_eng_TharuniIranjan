@@ -13,7 +13,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class PositionService_UnitTest {
-    public String databaseName = "stock_quote";
     public DatabaseConnectionManager dcm;
     public Connection c;
     public QuoteDao quoteDao;
@@ -36,7 +35,7 @@ public class PositionService_UnitTest {
 
     @Before
     public void init() throws SQLException {
-        dcm = new DatabaseConnectionManager(databaseName);
+        dcm = new DatabaseConnectionManager();
         c = dcm.getConnection();
 
         positionDao = new PositionDao(c);

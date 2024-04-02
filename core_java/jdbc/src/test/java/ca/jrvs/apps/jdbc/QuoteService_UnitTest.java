@@ -12,7 +12,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class QuoteService_UnitTest  {
-    public String databaseName = "stock_quote";
     public DatabaseConnectionManager dcm;
     public Connection c;
     public QuoteDao mockQuoteDao;
@@ -28,7 +27,7 @@ public class QuoteService_UnitTest  {
 
     @Before
     public void init() throws SQLException {
-        dcm = new DatabaseConnectionManager(databaseName);
+        dcm = new DatabaseConnectionManager();
         c = dcm.getConnection();
 
         positionDao = new PositionDao(c);
@@ -73,7 +72,6 @@ public class QuoteService_UnitTest  {
 
     @Test
     public void test_fetchApi() {
-        // assertNotNull(qs.fetchQuoteDataFromAPI("MSFT").get().getSymbol());
         when(mockQS.doesExist(quoteDao, msftSymbol)).thenReturn(true);
         when(mockQhh.fetchQuoteInfo(msftSymbol)).thenReturn(msftQuote);
         assertFalse(qs.fetchQuoteDataFromAPI(msftSymbol).isEmpty());

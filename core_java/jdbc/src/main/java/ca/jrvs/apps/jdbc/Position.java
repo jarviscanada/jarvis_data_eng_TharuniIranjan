@@ -22,10 +22,8 @@ public class Position {
 
     @Override
     public String toString() {
-        return "Position{" +
-                "symbol='" + ticker + '\'' +
-                ", number_of_shares='" + numOfShares + '\'' +
-                ", value_paid='" + valuePaid + '\'' +
-                '}';
+        return "symbol: " + ticker +
+                ", number of shares: " + numOfShares +
+                ", value paid: " + valuePaid;
     }
 }

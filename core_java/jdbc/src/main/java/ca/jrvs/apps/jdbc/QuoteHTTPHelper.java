@@ -21,20 +21,12 @@ public class QuoteHTTPHelper {
 
     }
 
-//    public static void main (String[] args) throws JsonProcessingException {
-//        String symbol = "AAPL";
-//        QuoteHTTPHelper qhh = new QuoteHTTPHelper();
-//        Quote quote = qhh.fetchQuoteInfo(symbol);
-//        System.out.println(quote);
-//    }
-
     /**
      * Fetch latest quote data from Alpha Vantage endpoint
      * @param symbol
      * @return Quote with latest data
      * @throws IllegalArgumentException if no data was found for the given symbol
      */
-    // UNCOMMENT
     public Quote fetchQuoteInfo(String symbol) throws IllegalArgumentException {
 
         Request request = new Request.Builder()
