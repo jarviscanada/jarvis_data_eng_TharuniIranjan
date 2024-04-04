@@ -1,5 +1,6 @@
-package ca.jrvs.apps.jdbc;
+package ca.jrvs.apps.jdbc.dao;
 
+import ca.jrvs.apps.jdbc.dto.Quote;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,7 +9,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import static ca.jrvs.apps.jdbc.JsonParser.*;
+import static ca.jrvs.apps.jdbc.util.JsonParser.*;
 
 
 public class QuoteDao implements CrudDao<Quote, String> {
@@ -54,7 +55,7 @@ public class QuoteDao implements CrudDao<Quote, String> {
     @Override
     public Quote update(Quote entity) throws IllegalArgumentException {
 
-        Quote quote;
+        Quote quote = null;
         try{
             this.c.setAutoCommit(false);
         }catch(SQLException e){

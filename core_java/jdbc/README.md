@@ -1,5 +1,7 @@
 # Introduction
-This Java application is a Stock Quote Application that allows a single user to view/buy/sell stocks using real time data. 
+The purpose of this project was to create a stock market simulator which allows an individual to view daily updates on particular stocks and buy or sell their shares at market price. It is to help people who want to invest but want to trial run with fake money to start off . 
+
+This was completed using Java where users are asked to enter a request type like view, buy or sell. Users can view all or one of the stocks they have purchased or view stock information of the current market value of a stock. They can also choose to buy new shares of a stock they currently own or  a whole new one. With the sell option they can choose to sell their shares of a particular stock or all shares they own. 
 
 # Quick Start
 To run the application, follow the below steps:
@@ -12,18 +14,16 @@ docker_user=tharunii
 docker_path=${docker_user}/jdbc
 docker pull ${docker_path}
 
+docker compose up
 docker run ${docker_path}
 ```
-
-# Implementation 
-Here's a brief summary of the key components and functionality of the application: <br>
 
 
 # Test
 Two logger files tells us the flow of the application: an info file to tell us what methods are running and an  error file that flags whenever a problem occurs. Junit and Mockito is used to run unit tests on specific methods and integration tests to ensure all methods are working together as one. 
 The below command will allow the Junit tests to run:
 ```bash
-mvn run...
+mvn test
 ```
 
 The below lines of input was inputted into the main process for testing purposes and was compared against data on the Alpha Vantage API:

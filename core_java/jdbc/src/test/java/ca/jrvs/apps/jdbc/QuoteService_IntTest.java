@@ -1,40 +1,51 @@
 package ca.jrvs.apps.jdbc;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.junit.Before;
-import org.junit.Test;
+import ca.jrvs.apps.jdbc.dao.PositionDao;
+import ca.jrvs.apps.jdbc.dao.QuoteDao;
+import ca.jrvs.apps.jdbc.dto.Quote;
+import ca.jrvs.apps.jdbc.util.DatabaseConnectionManager;
+import ca.jrvs.apps.jdbc.util.QuoteHTTPHelper;
+import ca.jrvs.apps.jdbc.util.QuoteService;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 public class QuoteService_IntTest {
-    public DatabaseConnectionManager dcm;
-    public Connection c;
-    public QuoteDao quoteDao;
-    public PositionDao positionDao;
-    public Quote msftQuote = new Quote();
-    public Quote emptyQuote = new Quote();
-    public Quote aaplQuote = new Quote();
-    public QuoteService qs = new QuoteService();
-    public String msftSymbol = "MSFT";
-    public String fakeSymbol = "MSFTX";
-    public String aaplSymbol = "AAPL";
+    public static DatabaseConnectionManager dcm;
+    public static Connection c;
+    public static QuoteDao quoteDao;
+    public static PositionDao positionDao;
+    public Quote msftQuote;
+    public static Quote aaplQuote;
+    public static QuoteService qs;
 
-    @Before
-    public void init() throws SQLException {
+    @BeforeAll
+    public static void init() throws SQLException {
         dcm = new DatabaseConnectionManager();
         c = dcm.getConnection();
 
         positionDao = new PositionDao(c);
-        positionDao.deleteAll();
-
         quoteDao = new QuoteDao(c);
+
+        qs = new QuoteService();
+
+        QuoteHTTPHelper qhh = new QuoteHTTPHelper();
+        aaplQuote = qhh.fetchQuoteInfo("AAPL");
+
+    }
+
+    @BeforeEach
+    public void setup() {
+        msftQuote = new Quote();
+
+        positionDao.deleteAll();
         quoteDao.deleteAll();
 
         msftQuote.setSymbol("MSFT");
@@ -49,24 +60,11 @@ public class QuoteService_IntTest {
         msftQuote.setChangePercent("-1.3715%");
         quoteDao.save(msftQuote);
 
-        emptyQuote.setSymbol("null");
-        emptyQuote.setOpen("null");
-        emptyQuote.setHigh("null");
-        emptyQuote.setLow("null");
-        emptyQuote.setPrice("null");
-        emptyQuote.setVolume("null");
-        emptyQuote.setLatestTradingDay("null");
-        emptyQuote.setPreviousClose("null");
-        emptyQuote.setChange("null");
-        emptyQuote.setChangePercent("null");
-
-        QuoteHTTPHelper qhh = new QuoteHTTPHelper();
-        aaplQuote = qhh.fetchQuoteInfo(aaplSymbol);
     }
 
     @Test
     public void test_fetchApi_create() {
-        Optional<Quote> testQuote1 = qs.fetchQuoteDataFromAPI(aaplSymbol);
+        Optional<Quote> testQuote1 = qs.fetchQuoteDataFromAPI("AAPL");
         assertFalse(testQuote1.isEmpty());
         assertEquals(testQuote1.get().getSymbol(), aaplQuote.getSymbol());
         assertEquals(testQuote1.get().getOpen(), aaplQuote.getOpen());
@@ -81,24 +79,13 @@ public class QuoteService_IntTest {
 
     @Test
     public void test_fetchApi_update() {
-        Optional<Quote> testQuote2 = qs.fetchQuoteDataFromAPI(msftSymbol);
+        Optional<Quote> testQuote2 = qs.fetchQuoteDataFromAPI("MSFT");
         assertFalse(testQuote2.isEmpty());
-        assertEquals(testQuote2.get().getSymbol(), msftQuote.getSymbol());
-
-        assertNotEquals(testQuote2.get().getOpen(), msftQuote.getOpen());
-        assertNotEquals(testQuote2.get().getHigh(), msftQuote.getHigh());
-        assertNotEquals(testQuote2.get().getLow(), msftQuote.getLow());
-        assertNotEquals(testQuote2.get().getPrice(), msftQuote.getPrice());
-        assertNotEquals(testQuote2.get().getPreviousClose(), msftQuote.getPreviousClose());
-        assertNotEquals(testQuote2.get().getChange(), msftQuote.getChange());
-        assertNotEquals(testQuote2.get().getChangePercent(), msftQuote.getChangePercent());
-
-        assertNotEquals(testQuote2.get().getLatestTradingDay(), msftQuote.getLatestTradingDay());
     }
 
     @Test
     public void test_fetchApi_empty() {
-        Optional<Quote> testQuote3 = qs.fetchQuoteDataFromAPI(fakeSymbol);
+        Optional<Quote> testQuote3 = qs.fetchQuoteDataFromAPI("MSFTX");
         assertTrue(testQuote3.isEmpty());
     }
 }

@@ -1,10 +1,11 @@
 package ca.jrvs.apps.jdbc;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.junit.Before;
-import org.junit.Test;
+import ca.jrvs.apps.jdbc.dao.PositionDao;
+import ca.jrvs.apps.jdbc.dao.QuoteDao;
+import ca.jrvs.apps.jdbc.dto.Quote;
+import ca.jrvs.apps.jdbc.util.DatabaseConnectionManager;
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mock;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -13,9 +14,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 public class QuoteDao_Test {
     public DatabaseConnectionManager dcm;
@@ -26,7 +26,8 @@ public class QuoteDao_Test {
     public Quote sampleQuote2 = new Quote();
     public String msftSymbol = "MSFT";
     public String fakeSymbol = "MSFTX";
-    @Before
+
+    @BeforeEach
     public void init() throws SQLException {
         dcm = new DatabaseConnectionManager();
         c = dcm.getConnection();

@@ -1,5 +1,9 @@
-package ca.jrvs.apps.jdbc;
+package ca.jrvs.apps.jdbc.util;
 
+import ca.jrvs.apps.jdbc.dao.PositionDao;
+import ca.jrvs.apps.jdbc.dao.QuoteDao;
+import ca.jrvs.apps.jdbc.dto.Position;
+import ca.jrvs.apps.jdbc.dto.Quote;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +13,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.Scanner;
 
-import static ca.jrvs.apps.jdbc.JsonParser.*;
+import static ca.jrvs.apps.jdbc.util.JsonParser.*;
 
 /**
  * Runs the UI of the Stock Quote Application
@@ -47,12 +51,24 @@ public class StockQuoteController {
             logger.info("*Processing request '" + Arrays.toString(request) + "'");
 
             switch (requestType) {
-                case "i" -> instructions();
-                case "view" -> handleView(request);
-                case "buy" -> handleBuy(request);
-                case "sell" -> handleSell(request);
-                case "q" -> System.out.println("Thanks, come again!");
-                default -> System.out.print("Invalid request type");
+                case "i":
+                    instructions();
+                    break;
+                case "view":
+                    handleView(request);
+                    break;
+                case "buy":
+                    handleBuy(request);
+                    break;
+                case "sell":
+                    handleSell(request);
+                    break;
+                case "q":
+                    System.out.println("Thanks, come again!");
+                    break;
+                default:
+                    System.out.print("Invalid request type");
+                    break;
             }
         }
         logger.info("Exiting Application");
@@ -180,15 +196,18 @@ public class StockQuoteController {
         // if the correct number of inputs is given
         // if the api limit is reached
         if (request.length == 3) {
-            if (apiCalls+1 < API_LIMIT) {
+            if (apiCalls+2 < API_LIMIT) {
                 String symbol = request[1];
                 String shareString = request[2];
                 if (isNumber(shareString)){
                     int shares = convertStringToInt(shareString);
-                    double defaultPrice = 0.00;
 
-                    Position newPosition = positionService.buy(symbol, shares, defaultPrice);
-                    apiCalls += 1;
+                    QuoteHTTPHelper qhh = new QuoteHTTPHelper();
+                    Quote newQuote = qhh.fetchQuoteInfo(symbol);
+                    double stockPrice = convertStringToDouble(newQuote.getPrice());
+
+                    Position newPosition = positionService.buy(symbol, shares, stockPrice);
+                    apiCalls += 2;
 
                     if (newPosition.getTicker() != null) {
                         System.out.println("Purchase Complete");

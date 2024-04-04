@@ -1,5 +1,9 @@
-package ca.jrvs.apps.jdbc;
+package ca.jrvs.apps.jdbc.util;
 
+import ca.jrvs.apps.jdbc.dao.PositionDao;
+import ca.jrvs.apps.jdbc.dao.QuoteDao;
+import ca.jrvs.apps.jdbc.dto.Position;
+import ca.jrvs.apps.jdbc.dto.Quote;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,8 +11,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
 
-import static ca.jrvs.apps.jdbc.JsonParser.convertStringToDouble;
-import static ca.jrvs.apps.jdbc.JsonParser.convertStringToInt;
+import static ca.jrvs.apps.jdbc.util.JsonParser.convertStringToInt;
 
 /***
  * Handles services for position: adding new/updating old positions, deleting one/all position, viewing one/all
@@ -63,7 +66,6 @@ public class PositionService {
         }
 
         // if the symbol is already in the position db, make an update, else, create a new value
-        double stockPrice = convertStringToDouble(quote.get().getPrice());
         if (doesExist(positionDao, ticker)) {
             Position existingPos = positionDao.findById(ticker).get();
             int newShares = (int) updateValue(numberOfShares, 1, existingPos.getNumOfShares());
@@ -75,15 +77,14 @@ public class PositionService {
             }
             position.setTicker(symbol);
             position.setNumOfShares(newShares);
-            position.setValuePaid(updateValue(numberOfShares, stockPrice, existingPos.getValuePaid()));
+            position.setValuePaid(updateValue(numberOfShares, price, existingPos.getValuePaid()));
             positionDao.update(position);
         } else {
             position.setTicker(symbol);
             position.setNumOfShares(numberOfShares);
-            position.setValuePaid(updateValue(numberOfShares, stockPrice, 0));
+            position.setValuePaid(updateValue(numberOfShares, price, 0));
             positionDao.save(position);
         }
-
         return position;
     }
 
@@ -112,7 +113,7 @@ public class PositionService {
     }
 
     public boolean isValidShares(int maxAmount, int purchaseAmount) {
-        return purchaseAmount >= 0 && purchaseAmount < Integer.MAX_VALUE && purchaseAmount <= maxAmount;
+        return purchaseAmount >= 0 && purchaseAmount <= maxAmount;
     }
 
     public boolean doesExist(PositionDao pd, String s) {

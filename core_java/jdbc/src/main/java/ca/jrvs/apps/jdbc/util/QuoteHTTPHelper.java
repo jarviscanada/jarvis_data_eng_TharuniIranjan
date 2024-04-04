@@ -1,5 +1,6 @@
-package ca.jrvs.apps.jdbc;
+package ca.jrvs.apps.jdbc.util;
 
+import ca.jrvs.apps.jdbc.dto.Quote;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import okhttp3.OkHttpClient;
@@ -11,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.http.HttpTimeoutException;
 
-import static ca.jrvs.apps.jdbc.JsonParser.*;
+import static ca.jrvs.apps.jdbc.util.JsonParser.*;
 
 public class QuoteHTTPHelper {
     private String apiKey;

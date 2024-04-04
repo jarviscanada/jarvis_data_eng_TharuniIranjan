@@ -1,5 +1,7 @@
-package ca.jrvs.apps.jdbc;
+package ca.jrvs.apps.jdbc.util;
 
+import ca.jrvs.apps.jdbc.dao.QuoteDao;
+import ca.jrvs.apps.jdbc.dto.Quote;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
