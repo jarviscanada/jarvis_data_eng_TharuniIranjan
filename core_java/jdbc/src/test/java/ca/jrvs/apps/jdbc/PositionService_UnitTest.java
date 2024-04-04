@@ -1,65 +1,50 @@
 package ca.jrvs.apps.jdbc;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.junit.Before;
-import org.junit.Test;
+import ca.jrvs.apps.jdbc.dao.PositionDao;
+import ca.jrvs.apps.jdbc.dao.QuoteDao;
+import ca.jrvs.apps.jdbc.dto.Position;
+import ca.jrvs.apps.jdbc.dto.Quote;
+import ca.jrvs.apps.jdbc.util.DatabaseConnectionManager;
+import ca.jrvs.apps.jdbc.util.PositionService;
+import ca.jrvs.apps.jdbc.util.QuoteHTTPHelper;
+import ca.jrvs.apps.jdbc.util.QuoteService;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class PositionService_UnitTest {
-    public DatabaseConnectionManager dcm;
-    public Connection c;
-    public QuoteDao quoteDao;
-    public PositionDao positionDao;
-    public QuoteDao mockQuoteDao;
-    public QuoteHTTPHelper mockQhh;
-    public Quote msftQuote = new Quote();
-    public Position msftPosition = new Position();
-    public PositionService ps = new PositionService();
-    public QuoteService mockQS = new QuoteService();
-    public PositionService mockPS = new PositionService();
-    public String msftSymbol = "MSFT";
-    public String fakeSymbol = "MSFTX";
-    public int shares = 2;
-    public double price = 422.86;
-    public int volume = 1806045;
-    public double oldVal = 427.41;
-    public double expected = 1273.13; //(numShares*price)+oldValue;
+    public static DatabaseConnectionManager dcm;
+    public static Connection c;
+    public static QuoteDao quoteDao;
+    public static PositionDao positionDao;
+    public static QuoteDao mockQuoteDao;
+    public static QuoteHTTPHelper mockQhh;
+    public static Quote msftQuote;
+    public static Position msftPosition;
+    public static PositionService ps;
+    public static QuoteService mockQS;
+    public static PositionService mockPS;
 
 
-    @Before
-    public void init() throws SQLException {
+    @BeforeAll
+    public static void init() throws SQLException {
         dcm = new DatabaseConnectionManager();
         c = dcm.getConnection();
 
         positionDao = new PositionDao(c);
-        positionDao.deleteAll();
-
         quoteDao = new QuoteDao(c);
-        quoteDao.deleteAll();
 
-        msftQuote.setSymbol(msftSymbol);
-        msftQuote.setOpen("425.24");
-        msftQuote.setHigh("427.41");
-        msftQuote.setLow("421.61");
-        msftQuote.setPrice(String.valueOf(price));
-        msftQuote.setVolume(String.valueOf(volume));
-        msftQuote.setLatestTradingDay("2024-03-25");
-        msftQuote.setPreviousClose("428.74");
-        msftQuote.setChange("-5.88");
-        msftQuote.setChangePercent("-1.3715%");
-        quoteDao.save(msftQuote);
-
-        msftPosition.setTicker(msftSymbol);
-        msftPosition.setNumOfShares(1);
-        msftPosition.setValuePaid(oldVal);
-        positionDao.save(msftPosition);
+        msftQuote = new Quote();
+        msftPosition = new Position();
+        ps = new PositionService();
 
         mockQuoteDao = mock(QuoteDao.class);
         mockQhh = mock(QuoteHTTPHelper.class);
@@ -67,41 +52,65 @@ public class PositionService_UnitTest {
         mockPS = mock(PositionService.class);
     }
 
+
+    @BeforeEach
+    public void setup() {
+        positionDao.deleteAll();
+        quoteDao.deleteAll();
+
+        msftQuote.setSymbol("MSFT");
+        msftQuote.setOpen("425.24");
+        msftQuote.setHigh("427.41");
+        msftQuote.setLow("421.61");
+        msftQuote.setPrice(String.valueOf(422.86));
+        msftQuote.setVolume(String.valueOf(1806045));
+        msftQuote.setLatestTradingDay("2024-03-25");
+        msftQuote.setPreviousClose("428.74");
+        msftQuote.setChange("-5.88");
+        msftQuote.setChangePercent("-1.3715%");
+        quoteDao.save(msftQuote);
+
+        msftPosition.setTicker("MSFT");
+        msftPosition.setNumOfShares(1);
+        msftPosition.setValuePaid(427.41);
+        positionDao.save(msftPosition);
+    }
+
     @Test
     public void test_calculateValue() {
-        assertEquals(ps.updateValue(shares, price, oldVal), expected, 0.0001);
+        assertEquals(ps.updateValue(2, 422.86, 427.41), 1273.13, 0.0001);
     }
 
     @Test
     public void test_isValid() {
-        assertTrue(ps.isValidShares(volume, shares));
-        assertFalse(ps.isValidShares(volume, volume+1));
+        assertTrue(ps.isValidShares(1806045, 2));
+        assertFalse(ps.isValidShares(1806045, 1806045+1));
     }
 
     @Test
     public void test_doesExist() {
-        assertTrue(ps.doesExist(positionDao, msftSymbol));
-        assertFalse(ps.doesExist(positionDao, fakeSymbol));
+        assertTrue(ps.doesExist(positionDao, "MSFT"));
+        assertFalse(ps.doesExist(positionDao, "MSFTX"));
     }
 
     @Test
     public void test_sell() {
-        when(mockPS.doesExist(positionDao, msftSymbol)).thenReturn(true);
-        ps.sell(msftSymbol);
-        assertFalse(ps.doesExist(positionDao, msftSymbol));
+        when(mockPS.doesExist(positionDao, "MSFT")).thenReturn(true);
+        ps.sell("MSFT");
+        assertFalse(ps.doesExist(positionDao, "MSFT"));
     }
 
     @Test
     public void test_buy() {
-        when(mockQS.fetchQuoteDataFromAPI(msftSymbol)).thenReturn(Optional.ofNullable(msftQuote));
-        when(mockPS.isValidShares(volume, shares)).thenReturn(true);
-        when(mockPS.doesExist(positionDao, msftSymbol)).thenReturn(true);
-        Position testPos1 = ps.buy(msftSymbol, shares, price);
+        when(mockQS.fetchQuoteDataFromAPI("MSFT")).thenReturn(Optional.of(msftQuote));
+        when(mockPS.isValidShares(1806045, 2)).thenReturn(true);
+        when(mockPS.doesExist(positionDao, "MSFT")).thenReturn(true);
+        Position testPos1 = ps.buy("MSFT", 2, 422.86);
 
-        assertTrue(mockPS.doesExist(positionDao, msftSymbol));
-        assertEquals(testPos1.getTicker(), msftPosition.getTicker());
-        assertEquals(testPos1.getNumOfShares(), msftPosition.getNumOfShares()+shares);
-        assertEquals(testPos1.getValuePaid(), expected, 0.0001);
+        assertTrue(mockPS.doesExist(positionDao, "MSFT"));
+        assertEquals("MSFT", testPos1.getTicker());
+        assertEquals(testPos1.getNumOfShares(), 3);
+        assertEquals(testPos1.getValuePaid(), 1273.13, 0.0001);
 
     }
 

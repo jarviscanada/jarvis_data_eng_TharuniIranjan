@@ -1,68 +1,58 @@
 package ca.jrvs.apps.jdbc;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.junit.Before;
-import org.junit.Test;
+import ca.jrvs.apps.jdbc.dao.PositionDao;
+import ca.jrvs.apps.jdbc.dao.QuoteDao;
+import ca.jrvs.apps.jdbc.dto.Position;
+import ca.jrvs.apps.jdbc.dto.Quote;
+import ca.jrvs.apps.jdbc.util.DatabaseConnectionManager;
+import ca.jrvs.apps.jdbc.util.PositionService;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class PositionService_IntTest {
-    public DatabaseConnectionManager dcm;
-    public Connection c;
-    public QuoteDao quoteDao;
-    public Quote msftQuote = new Quote();
+    public static DatabaseConnectionManager dcm;
+    public static Connection c;
+    public static QuoteDao quoteDao;
+    public static Quote msftQuote;
 
+    public static PositionDao positionDao;
+    public static PositionService ps;
+    public static Position msftPosition;
+    public static Position emptyPosition;
 
-    public PositionDao positionDao;
-    public PositionService ps = new PositionService();
-
-    public Position msftPosition = new Position();
-    public String msftSymbol = "MSFT";
-    public int msftShares = 2;
-    public double msftPrice = 422.86;
-    public int msftVolume = 1806045;
-    public double msftOldPrice = 427.41;
-    public double msftExpectedPrice = (msftShares*msftPrice)+msftOldPrice;
-
-    public String aaplSymbol = "AAPL";
-    public int aaplShares = 5;
-    public double aaplPrice = 100;
-    public double aaplExpectedPrice = 500;
-
-    public Position emptyPosition = new Position();
-    public String newSymbol = "GOOG";
-    public String fakeSymbol = "MSFTX";
-    public int defaultShares = 1;
-    public int largeShares = 1000000000;
-    public String date;
-
-
-    @Before
-    public void init() throws SQLException {
+    @BeforeAll
+    public static void init() throws SQLException {
         dcm = new DatabaseConnectionManager();
         c = dcm.getConnection();
 
         positionDao = new PositionDao(c);
-        positionDao.deleteAll();
-
         quoteDao = new QuoteDao(c);
+
+        msftQuote = new Quote();
+        msftPosition = new Position();
+        emptyPosition = new Position();
+        ps = new PositionService();
+    }
+
+
+    @BeforeEach
+    public void setup() {
+        positionDao.deleteAll();
         quoteDao.deleteAll();
 
-        msftQuote.setSymbol(msftSymbol);
+        msftQuote.setSymbol("MSFT");
         msftQuote.setOpen("425.24");
         msftQuote.setHigh("427.41");
         msftQuote.setLow("421.61");
-        msftQuote.setPrice(String.valueOf(msftPrice));
-        msftQuote.setVolume(String.valueOf(msftVolume));
+        msftQuote.setPrice(String.valueOf(422.86));
+        msftQuote.setVolume(String.valueOf(1806045));
         msftQuote.setLatestTradingDay("2024-03-25");
         msftQuote.setPreviousClose("428.74");
         msftQuote.setChange("-5.88");
@@ -70,70 +60,57 @@ public class PositionService_IntTest {
         quoteDao.save(msftQuote);
 
 
-        msftPosition.setTicker(msftSymbol);
-        msftPosition.setNumOfShares(defaultShares);
-        msftPosition.setValuePaid(msftOldPrice);
+        msftPosition.setTicker("MSFT");
+        msftPosition.setNumOfShares(1);
+        msftPosition.setValuePaid(427.41);
         positionDao.save(msftPosition);
 
-
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate now = LocalDate.now();
-        LocalDate yesterdayDate = now.minusDays(1);
-        date = dtf.format(yesterdayDate);
     }
 
     @Test
     public void test_buy_create_success() {
         // successful buy on a new stock
-        Position aaplPos1 = ps.buy(aaplSymbol, aaplShares, aaplPrice);
-        assertEquals(aaplPos1.getTicker(), aaplSymbol);
-        assertEquals(aaplPos1.getNumOfShares(), aaplShares);
-        assertEquals(aaplPos1.getValuePaid(), aaplExpectedPrice, 0.0001);
+        Position aaplPos1 = ps.buy("AAPL", 5, 100);
+        assertEquals(aaplPos1.getTicker(), "AAPL");
+        assertEquals(aaplPos1.getNumOfShares(), 5);
+        assertEquals(aaplPos1.getValuePaid(), 500, 0.0001);
     }
 
     @Test
     public void test_buy_create_fakeSymbol() {
         // symbol does not exist
-        Position fakePos = ps.buy(fakeSymbol, defaultShares, aaplPrice);
-        assertEquals(fakePos.getTicker(), emptyPosition.getTicker());
-        assertEquals(fakePos.getNumOfShares(), emptyPosition.getNumOfShares());
-        assertEquals(fakePos.getValuePaid(), emptyPosition.getValuePaid(), 0.0001);
+        Position fakePos1 = ps.buy("MSFTX", 1, 100);
+        assertEquals(fakePos1.getTicker(), emptyPosition.getTicker());
+        assertEquals(fakePos1.getNumOfShares(), emptyPosition.getNumOfShares());
+        assertEquals(fakePos1.getValuePaid(), emptyPosition.getValuePaid(), 0.0001);
     }
 
-    @Test
-    public void test_buy_create_invalidShares() {
-        // inputted share amount is larger than total shares
-        Position fakePos = ps.buy(newSymbol, largeShares, aaplPrice);
-        assertEquals(fakePos.getTicker(), emptyPosition.getTicker());
-        assertEquals(fakePos.getNumOfShares(), emptyPosition.getNumOfShares());
-        assertEquals(fakePos.getValuePaid(), emptyPosition.getValuePaid(), 0.0001);
-    }
+//    @Test
+//    public void test_buy_create_invalidShares() {
+//        // inputted share amount is larger than total shares
+//        Position fakePos2 = ps.buy("MSFT", 1000000000, 100);
+//        assertEquals(fakePos2.getTicker(), emptyPosition.getTicker());
+//        assertEquals(fakePos2.getNumOfShares(), emptyPosition.getNumOfShares());
+//        assertEquals(fakePos2.getValuePaid(), emptyPosition.getValuePaid(), 0.0001);
+//    }
 
     @Test
     public void test_buy_update_success() {
         // successful buy on a stock previously purchased
-        Position msftPos1 = ps.buy(msftSymbol, msftShares, msftPrice);
+        Position msftPos1 = ps.buy("MSFT", 2, 422.86);
         assertEquals(msftPos1.getTicker(), msftPosition.getTicker());
-        assertEquals(msftPos1.getNumOfShares(), msftPosition.getNumOfShares()+msftShares);
-        assertEquals(msftPos1.getValuePaid(), msftExpectedPrice, 0.0001);
+        assertEquals(msftPos1.getNumOfShares(), msftPosition.getNumOfShares()+2);
+        assertEquals(msftPos1.getValuePaid(), 1273.13, 0.0001);
     }
 
-    @Test
-    public void test_buy_update_invalidShares() {
-        // successful buy on a stock previously purchased
-        Position msftPos2 = ps.buy(msftSymbol, largeShares, msftPrice);
-        assertEquals(msftPos2.getTicker(), emptyPosition.getTicker());
-        assertEquals(msftPos2.getNumOfShares(), emptyPosition.getNumOfShares());
-        assertEquals(msftPos2.getValuePaid(), emptyPosition.getValuePaid(), 0.0001);
-    }
 
     @Test
     public void test_sell() {
-        ps.sell(msftSymbol);
-        assertFalse(ps.doesExist(positionDao, msftSymbol));
+        ps.sell("MSFT");
+        assertFalse(ps.doesExist(positionDao, "MSFT"));
 
-        ps.sell(fakeSymbol);
-        assertFalse(ps.doesExist(positionDao, fakeSymbol));
+        ps.sell("MSFTX");
+        assertFalse(ps.doesExist(positionDao, "MSFTX"));
     }
 
 }

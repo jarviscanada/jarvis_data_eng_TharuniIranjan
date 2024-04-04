@@ -1,4 +1,4 @@
-package ca.jrvs.apps.jdbc;
+package ca.jrvs.apps.jdbc.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -51,6 +51,12 @@ public class JsonParser {
         return (T) m.readValue(json, clazz);
     }
 
+    /***
+     * Convert string to a specified type, whether its int, bool, date
+     * @param value the string we want to change
+     * @return the converted string
+     */
+
     public static double convertStringToDouble(String value) {
         BigDecimal bd = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP);
         return bd.doubleValue();
@@ -62,6 +68,20 @@ public class JsonParser {
 
     public static Date convertStringToDate(String value) throws ParseException {
         return Date.valueOf(value);
+    }
+
+    /***
+     * Checks if an inputted value is of type integer
+     * @param s the input
+     * @return true if the string can be parsed to an integer and false otherwise
+     */
+    public static boolean isNumber(String s) {
+        for (int i = 0; i < s.length(); i++) {
+            if (!Character.isDigit(s.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

@@ -1,12 +1,23 @@
-package ca.jrvs.apps.jdbc;
+package ca.jrvs.apps.jdbc.util;
+
+import ca.jrvs.apps.jdbc.dao.PositionDao;
+import ca.jrvs.apps.jdbc.dao.QuoteDao;
+import ca.jrvs.apps.jdbc.dto.Position;
+import ca.jrvs.apps.jdbc.dto.Quote;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Scanner;
 
-import static ca.jrvs.apps.jdbc.JsonParser.*;
+import static ca.jrvs.apps.jdbc.util.JsonParser.*;
 
+/**
+ * Runs the UI of the Stock Quote Application
+ */
 public class StockQuoteController {
     public DatabaseConnectionManager dcm;
     public Connection c;
@@ -16,7 +27,12 @@ public class StockQuoteController {
     public PositionService positionService;
     public int apiCalls;
     public int API_LIMIT = 6;
+    private static Logger logger = LoggerFactory.getLogger(StockQuoteController.class);
 
+    /**
+     * Creates the necessary method calls according to user input
+     * @throws SQLException when there is an error connecting to the db
+     */
     public void initClient() throws SQLException {
         System.out.println("Welcome!\nType i for user manual and q to quit");
 
@@ -26,22 +42,41 @@ public class StockQuoteController {
         apiCalls = 0;
         dbConnect();
 
+        // Keep asking user what type of service they want as long as they don't type q to quit
+        logger.info("Starting Application");
         while (!requestType.equals("q")) {
             System.out.print("\nEnter service request: ");
             request = myObj.nextLine().split(" ");
             requestType = request[0];
+            logger.info("*Processing request '" + Arrays.toString(request) + "'");
 
             switch (requestType) {
-                case "i" -> instructions();
-                case "view" -> handleView(request);
-                case "buy" -> handleBuy(request);
-                case "sell" -> handleSell(request);
-                case "q" -> System.out.println("Thanks, come again!");
-                default -> System.out.print("Invalid request type");
+                case "i":
+                    instructions();
+                    break;
+                case "view":
+                    handleView(request);
+                    break;
+                case "buy":
+                    handleBuy(request);
+                    break;
+                case "sell":
+                    handleSell(request);
+                    break;
+                case "q":
+                    System.out.println("Thanks, come again!");
+                    break;
+                default:
+                    System.out.print("Invalid request type");
+                    break;
             }
         }
+        logger.info("Exiting Application");
     }
 
+    /***
+     * When i is inputted for user manual this text prompt appears on the terminal describing how to interact with the app
+     */
     public void instructions() {
         String border = "********************";
         System.out.println("\n" + border);
@@ -70,6 +105,11 @@ public class StockQuoteController {
         System.out.println(border);
 
     }
+
+    /***
+     * initializes connection to the database, and quote and position table services
+     * @throws SQLException
+     */
     public void dbConnect() throws SQLException {
         dcm = new DatabaseConnectionManager();
         c = dcm.getConnection();
@@ -79,25 +119,39 @@ public class StockQuoteController {
         positionService = new PositionService();
     }
 
+    /***
+     * Prases user input and either shows stock data from an api call or from the database
+     * @param request the line the user inputted
+     */
     public void handleView(String[] request) {
         if (request.length == 3) {
             String type = request[1];
             String symbol = request[2];
 
+            // new means they want to see the current market value of a specific stock
+            // api call is made using fetchQuoteInfo
             if (type.equals("new")) {
+                // since its a freemium api, there is limited calls that can be made
                 if (apiCalls+1 < API_LIMIT) {
-                    Quote newQuote = quoteService.fetchQuoteDataFromAPI(symbol).get();
+                    QuoteHTTPHelper qhh = new QuoteHTTPHelper();
+                    Quote newQuote = qhh.fetchQuoteInfo(symbol);
                     apiCalls += 1;
                     if (newQuote.getSymbol() == null) {
                         System.out.println("Symbol does not exist");
+                        logger.warn("Could not process view request: fetchQuoteInfo returned an empty Quote.");
                     } else {
                         System.out.println("STOCK INFO");
                         System.out.println(newQuote);
+                        logger.info("Successfully processed view request.");
                     }
                 } else {
                     System.out.println("Reached daily limit. Cannot view/buy new stocks at the moment.");
+                    logger.warn("Could not process view request: reached daily API limit.");
                 }
+
+            // old means user wants to look at the stock info that has been stored in the db based off their purchases
             } else if (type.equals("old")) {
+                // * means all items so loop through and print those items
                 if (symbol.equals("*")) {
                     Iterable<Quote> quoteList = quoteDao.findAll();
                     Iterable<Position> positionList = positionDao.findAll();
@@ -105,56 +159,84 @@ public class StockQuoteController {
                     for (Quote q: quoteList) { System.out.println(q);}
                     System.out.println("\nPURCHASE INFO");
                     for (Position p: positionList) { System.out.println(p);}
+                    logger.info("Successfully processed view request.");
 
                 } else {
+                    // find a particular stock in the db and prin the Quote and Position
                     Optional<Quote> qd = quoteDao.findById(symbol);
                     Optional<Position> pd = positionDao.findById(symbol);
-                    if (qd.get().getSymbol() != null) {
+                    if (pd.get().getTicker() != null) {
                         System.out.println("STOCK INFO");
                         System.out.println(qd.get());
                         System.out.println("\nPURCHASE INFO");
                         System.out.println(pd.get());
+                        logger.info("Successfully processed view request.");
                     } else {
                         System.out.println("This stock has not been purchased");
+                        logger.warn("Could not process view request: findById returned an empty Position for symbol " + symbol);
                     }
                 }
-
             } else {
-                System.out.println("Invalid type. Please enter 'old' or 'new'");
+                System.out.println("Invalid view type. Please enter 'old' or 'new'");
+                logger.warn("Could not process view request: view type '" + type + "' was entered instead of 'new' or 'old'");
             }
 
         } else {
             System.out.println("Insufficient number of inputs");
+            logger.warn("Could not process view request: too many/too little arguments");
         }
     }
 
+    /***
+     * Parses user input to buy more of a previously purchased stock or buy a new one and update the db accordingly
+     * @param request
+     */
     public void handleBuy(String[] request) {
+        // check:
+        // if the correct number of inputs is given
+        // if the api limit is reached
         if (request.length == 3) {
             if (apiCalls+2 < API_LIMIT) {
                 String symbol = request[1];
-                int shares = convertStringToInt(request[2]);
+                String shareString = request[2];
+                if (isNumber(shareString)){
+                    int shares = convertStringToInt(shareString);
 
-                Quote newQuote = quoteService.fetchQuoteDataFromAPI(symbol).get();
-                apiCalls += 1;
-                double price = convertStringToDouble(newQuote.getPrice());
+                    QuoteHTTPHelper qhh = new QuoteHTTPHelper();
+                    Quote newQuote = qhh.fetchQuoteInfo(symbol);
+                    double stockPrice = convertStringToDouble(newQuote.getPrice());
 
-                Position newPosition = positionService.buy(symbol, shares, price);
-                apiCalls += 1;
+                    Position newPosition = positionService.buy(symbol, shares, stockPrice);
+                    apiCalls += 2;
 
-                if (newPosition.getTicker() != null) {
-                    System.out.println("Purchase Complete");
-                    System.out.println("\nPURCHASE INFO");
-                    System.out.println(newPosition);
+                    if (newPosition.getTicker() != null) {
+                        System.out.println("Purchase Complete");
+                        System.out.println("\nPURCHASE INFO");
+                        System.out.println(newPosition);
+                        logger.info("Successfully processed buy request.");
+                    } else {
+                        System.out.println("Unable to retrieve stock information. Please ensure symbol was entered correctly");
+                        logger.warn("Could not process buy request: positionService.buy returned an empty Position.");
+
+                    }
+                } else {
+                    System.out.println("Invalid purchase amount. Please enter positive whole numbers");
+                    logger.warn("Could not process buy request: shares inputted was negative/decimal number.");
                 }
             } else {
                 System.out.println("Reached daily limit. Cannot view/buy new stocks.");
+                logger.warn("Could not process buy request: reached daily API limit.");
             }
-
         } else {
             System.out.println("Insufficient number of inputs");
+            logger.warn("Could not process buy request: too many/too little arguments");
         }
     }
 
+    /**
+     * Parses user input and removes a particular set of stock(s) from the db
+     * @param request
+     */
     public void handleSell(String[] request) {
         if (request.length == 2) {
             String symbol = request[1];
@@ -169,6 +251,7 @@ public class StockQuoteController {
                     positionDao.deleteAll();
                     quoteDao.deleteAll();
                     System.out.println("POS Complete");
+                    logger.info("Successfully processed view request.");
                 } else {
                     Optional<Position> deletePosition = positionDao.findById(symbol);
 
@@ -176,15 +259,19 @@ public class StockQuoteController {
                         positionService.sell(symbol);
                         quoteDao.deleteById(symbol);
                         System.out.println("POS Complete");
+                        logger.info("Successfully processed sell request.");
                     } else {
                         System.out.println("This stock has not been purchased to sell");
+                        logger.warn("Could not process sell request: positionDao.findById() returned empty Position");
                     }
                 }
             } else if (!shouldSell.equals("n")) {
                 System.out.println("Invalid input");
+                logger.warn("Could not process sell request: did not enter y/n when confirming sale");
             }
         } else {
             System.out.println("Insufficient number of inputs");
+            logger.warn("Could not process sell request: too many/too little arguments");
         }
     }
 }

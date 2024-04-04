@@ -1,4 +1,7 @@
-package ca.jrvs.apps.jdbc;
+package ca.jrvs.apps.jdbc.util;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,18 +12,11 @@ public class DatabaseConnectionManager {
     private static final String CONFIGFILE = "config.properties";
     private final String url;
     private final Properties properties;
+    private static Logger logger = LoggerFactory.getLogger(DatabaseConnectionManager.class);
 
-    public static String getProperty(String property) {
-        Properties properties = new Properties();
-        try (InputStream inputStream = DatabaseConnectionManager.class.getClassLoader().getResourceAsStream(CONFIGFILE)) {
-            properties.load(inputStream);
-            return properties.getProperty(property);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
+    /***
+     * connects to the specified db using the given information
+     */
     public DatabaseConnectionManager() {
         String host = DatabaseConnectionManager.getProperty("psql.host");
         String username = DatabaseConnectionManager.getProperty("psql.username");
@@ -35,6 +31,23 @@ public class DatabaseConnectionManager {
 
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(this.url, this.properties);
+    }
+
+    /**
+     * Extracts data from the config file
+     * @param property what type of value we are looking for
+     * @return the value found in the config file
+     */
+    public static String getProperty(String property) {
+        Properties properties = new Properties();
+        try (InputStream inputStream = DatabaseConnectionManager.class.getClassLoader().getResourceAsStream(CONFIGFILE)) {
+            properties.load(inputStream);
+            return properties.getProperty(property);
+        } catch (IOException e) {
+            //e.printStackTrace();
+            logger.error("Failed to retrieve config property " + property + " in DatabaseConnectionManager-> " + e);
+            return null;
+        }
     }
 
 }

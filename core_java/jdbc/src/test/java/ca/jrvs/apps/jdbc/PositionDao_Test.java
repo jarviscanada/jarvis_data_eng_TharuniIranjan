@@ -1,8 +1,12 @@
 package ca.jrvs.apps.jdbc;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.junit.Before;
-import org.junit.Test;
+import ca.jrvs.apps.jdbc.dao.PositionDao;
+import ca.jrvs.apps.jdbc.dao.QuoteDao;
+import ca.jrvs.apps.jdbc.dto.Position;
+import ca.jrvs.apps.jdbc.dto.Quote;
+import ca.jrvs.apps.jdbc.util.DatabaseConnectionManager;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -10,7 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 public class PositionDao_Test {
     public DatabaseConnectionManager dcm;
@@ -28,7 +33,7 @@ public class PositionDao_Test {
     public double msftPrice = 422.86;
     public int msftVolume = 1806045;
 
-    @Before
+    @BeforeEach
     public void init() throws SQLException {
         dcm = new DatabaseConnectionManager();
         c = dcm.getConnection();
