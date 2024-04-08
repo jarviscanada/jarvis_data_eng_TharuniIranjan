@@ -17,6 +17,11 @@ Project source code: [https://github.com/jarviscanada/jarvis_data_eng_TharuniIra
 
 **Cluster Monitor** [[GitHub](https://github.com/jarviscanada/jarvis_data_eng_TharuniIranjan/tree/masterhttps://github.com/jarviscanada/jarvis_data_eng_TharuniIranjan/linux_sql)]: This project aims to assist the Jarvis Linux Cluster Administration (LCA) team in managing a Linux cluster of 10 nodes running CentOS 7. Users can write SQL queries to extract real-time resource usage data, facilitating future resource planning. The project includes a psql instance for data persistence, a bash_agent with scripts for data collection, and Docker for database provisioning. The source code is managed on GitHub, and cron is used for scheduling the agent scripts.
 
+**Core Java Apps** [[GitHub](https://github.com/jarviscanada/jarvis_data_eng_TharuniIranjan/tree/masterhttps://github.com/jarviscanada/jarvis_data_eng_TharuniIranjan/core_java)]:
+      
+  - JDBC App: The purpose of this project was to create a stock market simulator which allows an individual to view daily updates on particular stocks and buy or sell their shares at market price. It is to help people who want to invest but want to trial run with fake money to start off. Users are asked to enter a request type like view, buy or sell, and changes are made to the database accordingly. Java was used to develop this application with Maven as the build tool. Alpha Vantage API from RapidAPI was accessed using a GET request to access real-time stock information. JDBC was used to view/modify data in PostgreSQL. Testing was completed using Junit and Mockito.
+  - Grep App: This Java application is an implementation of a grep tool, which searches for lines within files that match a specified regular expression pattern. The application accepts three command-line arguments. The regular expression to search for, the root directory path where the search should begin, and the output file path where the matched lines will be written. Maven was used to build the Java project, Docker was used to containerize the application, and GitHub for source code management.
+
 
 ## Highlighted Projects
 **Learning Leaf - Web Application** [[GitHub](https://github.com/TharuniI/LearningLeaf/tree/main/majorgroupproject-nng-learning-leaf/majorgroupproject-nng-main)]: This full stack website was developed during COVID-19 and was created with the intent of enhancing the online learning experience. Users can access this website through different account types and are shown their corresponding dashboard. This application was coded using JavaScript dynamically update content, alongside the frontend framework Vue.js to build the user interface. It builds on top of standard HTML, CSS, and JavaScript to easily build components like scale students use to rate the lecture, and the table for professors to view the student reactions to a lecture, and more. It also has Firebase support, which was used in the backend. Services used include: authentication, cloud functions like sending event-based email notifications, and Firestore for a real time database.
@@ -48,6 +53,5 @@ Project source code: [https://github.com/jarviscanada/jarvis_data_eng_TharuniIra
 
 ## Miscellaneous
 - Career Essentials in Software Development by Microsoft and LinkedIn  (2023)
-- Leisure Skating: Still a work in progress, but I am learning to skate without falling down!
 - Board games: I love playing strategic-style board games with my friends. Some popular ones we are currently playing are Codenames, Coup, and Here to Slay
 - Home Improvement: I started by painting my house, but now I've done some roofing and sub flooring work. I love watching home improvement shows like Property Brothers, and hope to do more work around my house!
