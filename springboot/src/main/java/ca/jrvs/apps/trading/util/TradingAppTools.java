@@ -66,8 +66,14 @@ public class TradingAppTools {
         }
     }
 
-    public String setURL(String tickers){
-        return "";
+    public static boolean validTicker(String ticker) {
+        if (ticker == null || ticker.isEmpty()) {
+            return false;
+        }
+        if (ticker.length() > 5) {
+            return false;
+        }
+        return true;
     }
 
 }

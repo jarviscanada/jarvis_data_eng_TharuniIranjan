@@ -2,6 +2,7 @@ package ca.jrvs.apps.trading.dao;
 
 import ca.jrvs.apps.trading.config.MarketDataConfig;
 import ca.jrvs.apps.trading.entity.IexQuote;
+import ca.jrvs.apps.trading.service.QuoteService;
 import ca.jrvs.apps.trading.util.TradingAppTools;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -10,6 +11,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.apache.http.HttpEntity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -19,16 +22,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class MarketDataDao {
-    private static final String IEX_URL_ONE = "https://cloud.iexapis.com/stable/stock/";
-    private static final String IEX_URL_ALL = "https://cloud.iexapis.com/v1/stock/market/batch?";
     private CloseableHttpClient httpClient;
-    private final String baseUrl = TradingAppTools.getProperty("base.url");
     private MarketDataConfig marketDataConfig;
-    // private PoolingHttpClientConnectionManager phcm;
+    private static Logger logger = LoggerFactory.getLogger(MarketDataDao.class);
 
 
     public MarketDataDao(CloseableHttpClient httpClient, MarketDataConfig marketDataConfig) {
-        // this.httpClient = HttpClient.newHttpClient();
         this.httpClient = httpClient;
         this.marketDataConfig = marketDataConfig;
     }
@@ -42,14 +41,18 @@ public class MarketDataDao {
      * @throws DataRetrievalFailureException if HTTP request failed
      */
     public Optional<IexQuote> findById(String ticker) {
+        logger.info("Started call on MarketDataDao.findById");
         String url = marketDataConfig.getHost() + "stable/stock/" + ticker + "/quote?token=" + marketDataConfig.getToken();
 
         try {
             String responseBody = executeHttpGet(url).orElseThrow(() -> new DataRetrievalFailureException("No response body"));
+            logger.info("Successful call on MarketDataDao.findById");
             return Optional.of(TradingAppTools.toObjectFromJson(responseBody, IexQuote.class));
         } catch (HttpClientErrorException.NotFound e) {
+            logger.warn("Error on MarketDataDao.findById: Empty IexQuote returned");
             return Optional.empty(); // 404 response
         } catch (IOException e) {
+            logger.error("Error on MarketDataDao.findById: Failed to retrieve data from IEX API");
             throw new DataRetrievalFailureException("Failed to retrieve data from IEX API", e);
         }
     }
