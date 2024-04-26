@@ -24,7 +24,7 @@ public class MarketDataDaoIntTest {
     public void init(){
         CloseableHttpClient httpClient = HttpClients.createDefault();;
         MarketDataConfig marketDataConfig = new MarketDataConfig();
-        marketDataConfig.setHost("https://cloud.iexapis.com/v1/");
+        marketDataConfig.setHost("https://cloud.iexapis.com/");
         marketDataConfig.setToken(System.getenv("IEX_PUB_TOKEN"));
 
         dao = new MarketDataDao(httpClient, marketDataConfig);

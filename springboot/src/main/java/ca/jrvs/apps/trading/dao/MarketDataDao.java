@@ -42,7 +42,7 @@ public class MarketDataDao {
      * @throws DataRetrievalFailureException if HTTP request failed
      */
     public Optional<IexQuote> findById(String ticker) {
-        String url = marketDataConfig.getHost() + "stock/" + ticker + "/quote?token=" + marketDataConfig.getToken();
+        String url = marketDataConfig.getHost() + "stable/stock/" + ticker + "/quote?token=" + marketDataConfig.getToken();
 
         try {
             String responseBody = executeHttpGet(url).orElseThrow(() -> new DataRetrievalFailureException("No response body"));
