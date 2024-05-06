@@ -26,7 +26,7 @@ public class TestConfig {
     public MarketDataConfig marketDataConfig() {
         MarketDataConfig marketDataConfig = new MarketDataConfig();
         marketDataConfig.setHost("https://api.iex.cloud/v1/data/core/quote/");
-        marketDataConfig.setToken("sk_7569f60aa8ea461f96328d32c55c30c2");
+        marketDataConfig.setToken("pk_e5526318151a4b5c90efd25a42b6c532");
         return marketDataConfig;
     }
 
