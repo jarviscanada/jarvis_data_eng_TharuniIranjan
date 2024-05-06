@@ -5,9 +5,11 @@ import ca.jrvs.apps.trading.entity.IexQuote;
 import ca.jrvs.apps.trading.service.QuoteService;
 import ca.jrvs.apps.trading.util.TradingAppTools;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.apache.http.HttpEntity;
 
@@ -43,11 +45,16 @@ public class MarketDataDao {
     public Optional<IexQuote> findById(String ticker) {
         logger.info("Started call on MarketDataDao.findById");
         String url = marketDataConfig.getHost() + "stable/stock/" + ticker + "/quote?token=" + marketDataConfig.getToken();
+        ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            String responseBody = executeHttpGet(url).orElseThrow(() -> new DataRetrievalFailureException("No response body"));
+            Optional<String> responseBody = executeHttpGet(url);
+            if (responseBody.isEmpty()) {
+                throw new IllegalArgumentException("given ticker is invalid");
+            }
+            IexQuote iexQuote = objectMapper.readValue(responseBody.get(), IexQuote.class);
             logger.info("Successful call on MarketDataDao.findById");
-            return Optional.of(TradingAppTools.toObjectFromJson(responseBody, IexQuote.class));
+            return Optional.of(iexQuote);
         } catch (HttpClientErrorException.NotFound e) {
             logger.warn("Error on MarketDataDao.findById: Empty IexQuote returned");
             return Optional.empty(); // 404 response
@@ -112,7 +119,9 @@ public class MarketDataDao {
      * @return a HttpClient
      */
     private CloseableHttpClient getHttpClient() {
-        return httpClient;
+        HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+        return httpClientBuilder.build();
+        // return httpClient;
     }
 
 }

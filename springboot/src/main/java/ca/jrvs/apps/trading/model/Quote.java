@@ -1,7 +1,11 @@
 package ca.jrvs.apps.trading.model;
 
-public class Quote {
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
+@Entity
+public class Quote {
+    @Id
     private String ticker; //primary key
     private Double lastPrice;
     private Double bidPrice;
