@@ -11,11 +11,11 @@ public class Quote {
 
     //getters and setters
 
-    public String getTicker() {
+    public String getId() {
         return ticker;
     }
 
-    public void setTicker(String ticker) {
+    public void setId(String ticker) {
         this.ticker = ticker;
     }
 
