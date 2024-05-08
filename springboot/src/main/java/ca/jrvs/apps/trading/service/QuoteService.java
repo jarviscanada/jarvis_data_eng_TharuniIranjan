@@ -18,7 +18,6 @@ import java.util.Optional;
 @Service
 public class QuoteService {
     private final MarketDataDao marketDataDao;
-    @Autowired
     private final QuoteDao quoteDao;
     private static Logger logger = LoggerFactory.getLogger(QuoteService.class);
 
@@ -50,6 +49,10 @@ public class QuoteService {
         return iexQuoteOptional.get();
     }
 
+    public List<Quote> findAllQuotes() {
+        return quoteDao.findAll();
+    }
+
     public void updateMarketData() {
         List<Quote> quotes = quoteDao.findAll();
         List<Quote> updatedQuotes = new ArrayList<>();
@@ -64,6 +67,16 @@ public class QuoteService {
         quoteDao.saveAll(updatedQuotes);
     }
 
+    public Quote saveQuote(String ticker) {
+        if (ticker == null || ticker.isEmpty()) {
+            throw new IllegalArgumentException("Ticker cannot be null or empty");
+        }
+
+        IexQuote iexQuote = marketDataDao.findById(ticker).orElseThrow(IllegalArgumentException::new);
+        Quote quote = buildQuoteFromIexQuote(iexQuote);
+        return quoteDao.save(quote);
+    }
+
     public List<Quote> saveQuotes(List<String> tickers) {
         List<Quote> savedQuotes = new ArrayList<>();
         for (String ticker : tickers) {
@@ -74,13 +87,9 @@ public class QuoteService {
         return savedQuotes;
     }
 
-    public Quote saveQuote(Quote quote) {
-        return quoteDao.save(quote);
-    }
-
-    public List<Quote> findAllQuotes() {
-        return quoteDao.findAll();
-    }
+//    public Quote saveQuote(Quote quote) {
+//        return quoteDao.save(quote);
+//    }
 
     private Quote buildQuote(IexQuote iexQuote) {
         Quote quote = new Quote();
@@ -108,14 +117,6 @@ public class QuoteService {
         return quote;
     }
 
-    protected Quote saveQuote(String ticker) {
-        if (ticker == null || ticker.isEmpty()) {
-            throw new IllegalArgumentException("Ticker cannot be null or empty");
-        }
 
-        IexQuote iexQuote = marketDataDao.findById(ticker).orElseThrow(IllegalArgumentException::new);
-        Quote quote = buildQuoteFromIexQuote(iexQuote);
-        return quoteDao.save(quote);
-    }
 
 }
