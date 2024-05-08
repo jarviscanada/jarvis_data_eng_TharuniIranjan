@@ -18,6 +18,7 @@ import java.util.Optional;
 @Service
 public class QuoteService {
     private final MarketDataDao marketDataDao;
+    @Autowired
     private final QuoteDao quoteDao;
     private static Logger logger = LoggerFactory.getLogger(QuoteService.class);
 

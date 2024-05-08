@@ -9,8 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface QuoteDao extends JpaRepository<Quote, String> {
-    Quote save(Quote quote);
-    List<Quote> saveAll(List<Quote> quotes);
     List<Quote> findAll();
     Optional<Quote> findById(String ticker);
     boolean existsById(String ticker);
