@@ -7,11 +7,11 @@ import javax.persistence.Id;
 public class Quote {
     @Id
     private String ticker; //primary key
-    private Double lastPrice;
-    private Double bidPrice;
-    private Integer bidSize;
-    private Double askPrice;
-    private Integer askSize;
+    private Double last_price;
+    private Double bid_price;
+    private Integer bid_size;
+    private Double ask_price;
+    private Integer ask_size;
 
     //getters and setters
 
@@ -24,42 +24,42 @@ public class Quote {
     }
 
     public Double getLastPrice() {
-        return lastPrice;
+        return last_price;
     }
 
-    public void setLastPrice(Double lastPrice) {
-        this.lastPrice = lastPrice;
+    public void setLastPrice(Double last_price) {
+        this.last_price = last_price;
     }
 
     public Double getBidPrice() {
-        return bidPrice;
+        return bid_price;
     }
 
-    public void setBidPrice(Double bidPrice) {
-        this.bidPrice = bidPrice;
+    public void setBidPrice(Double bid_price) {
+        this.bid_price = bid_price;
     }
 
     public Integer getBidSize() {
-        return bidSize;
+        return bid_size;
     }
 
-    public void setBidSize(Integer bidSize) {
-        this.bidSize = bidSize;
+    public void setBidSize(Integer bid_size) {
+        this.bid_size = bid_size;
     }
 
     public Double getAskPrice() {
-        return askPrice;
+        return ask_price;
     }
 
-    public void setAskPrice(Double askPrice) {
-        this.askPrice = askPrice;
+    public void setAskPrice(Double ask_price) {
+        this.ask_price = ask_price;
     }
 
     public Integer getAskSize() {
-        return askSize;
+        return ask_size;
     }
 
-    public void setAskSize(Integer askSize) {
-        this.askSize = askSize;
+    public void setAskSize(Integer ask_size) {
+        this.ask_size = ask_size;
     }
 }

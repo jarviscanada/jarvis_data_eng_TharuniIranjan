@@ -1,13 +1,16 @@
 package ca.jrvs.apps.trading.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Account {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    int traderId;
+    int trader_id;
     double amount;
 
     public int getId() {
@@ -19,11 +22,11 @@ public class Account {
     }
 
     public int getTraderId() {
-        return traderId;
+        return trader_id;
     }
 
-    public void setTraderId(int traderId) {
-        this.traderId = traderId;
+    public void setTraderId(int trader_id) {
+        this.trader_id = trader_id;
     }
 
     public double getAmount() {

@@ -34,14 +34,14 @@ public class QuoteController {
         logger.info("Completed call on QuoteController.getQuote for ticker '" + ticker + "'");
         return iexQuote;
     }
-
-    @GetMapping("/quote/dailyList")
-    public List<Quote> getAllQuotes() {
-        logger.info("Started call on QuoteController.getAllQuotes");
-        logger.info("QuoteController.getAllQuotes: calling on QuoteService.findAllQuotes");
-        logger.info("Completed call on QuoteController.getAllQuotes");
-        return quoteService.findAllQuotes();
-    }
+//
+//    @GetMapping("/quote/dailyList")
+//    public List<Quote> getAllQuotes() {
+//        logger.info("Started call on QuoteController.getAllQuotes");
+//        logger.info("QuoteController.getAllQuotes: calling on QuoteService.findAllQuotes");
+//        logger.info("Completed call on QuoteController.getAllQuotes");
+//        return quoteService.findAllQuotes();
+//    }
 
     @PostMapping(path="/quote/tickerId/{tickerId}")
     public void addQuote(String ticker){
@@ -51,14 +51,14 @@ public class QuoteController {
         logger.info("Completed call on QuoteController.addQuote for ticker " + ticker);
     }
 
-    @PostMapping(path="/quote/tickerId/{tickerId}")
-    public void addAllQuotes(List<String> tickers){
-        String tickerListString = Joiner.on(',').join(tickers);
-        logger.info("Started call on QuoteController.addAllQuotes for tickers: " + tickerListString);
-        logger.info("QuoteController.addAllQuotes: calling on QuoteService.saveQuotes");
-        quoteService.saveQuotes(tickers);
-        logger.info("Completed call on QuoteController.addAllQuotes for tickers: " + tickerListString);
-    }
+//    @PostMapping(path="/quote/tickerId/{tickerId}")
+//    public void addAllQuotes(List<String> tickers){
+//        String tickerListString = Joiner.on(',').join(tickers);
+//        logger.info("Started call on QuoteController.addAllQuotes for tickers: " + tickerListString);
+//        logger.info("QuoteController.addAllQuotes: calling on QuoteService.saveQuotes");
+//        quoteService.saveQuotes(tickers);
+//        logger.info("Completed call on QuoteController.addAllQuotes for tickers: " + tickerListString);
+//    }
 
     @PutMapping(path="/iexMarketData")
     @ResponseStatus(HttpStatus.OK)

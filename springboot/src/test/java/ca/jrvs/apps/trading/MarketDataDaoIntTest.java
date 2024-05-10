@@ -1,17 +1,14 @@
-package ca.jrvs.apps.jdbc;
+package ca.jrvs.apps.trading;
 
 import ca.jrvs.apps.trading.config.MarketDataConfig;
 import ca.jrvs.apps.trading.dao.MarketDataDao;
 import ca.jrvs.apps.trading.entity.IexQuote;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.net.http.HttpClient;
 import java.util.Arrays;
 import java.util.List;
 
