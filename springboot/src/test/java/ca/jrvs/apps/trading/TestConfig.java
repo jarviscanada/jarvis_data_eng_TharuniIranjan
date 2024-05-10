@@ -1,4 +1,4 @@
-package ca.jrvs.apps.jdbc;
+package ca.jrvs.apps.trading;
 
 import ca.jrvs.apps.trading.config.MarketDataConfig;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -18,8 +18,8 @@ import java.net.http.HttpClient;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories
-@ComponentScan(basePackages = {"ca.jrvs.apps.trading.dao"})
+@EnableJpaRepositories(basePackages = {"ca.jrvs.apps.trading.dao"})
+@ComponentScan(basePackages = {"ca.jrvs.apps.trading.entity", "ca.jrvs.apps.trading.model", "ca.jrvs.apps.trading.dao"})
 public class TestConfig {
 
     @Bean
@@ -52,7 +52,7 @@ public class TestConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
-        em.setPackagesToScan("ca.jrvs.apps.trading.entity"); // Package containing your JPA entities
+        em.setPackagesToScan("ca.jrvs.apps.trading.entity", "ca.jrvs.apps.trading.model"); // Package containing your JPA entities
         em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         return em;
     }
