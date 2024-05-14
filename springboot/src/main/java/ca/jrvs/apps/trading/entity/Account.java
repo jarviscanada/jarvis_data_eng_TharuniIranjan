@@ -1,16 +1,22 @@
 package ca.jrvs.apps.trading.entity;
 
+<<<<<<< HEAD
+import javax.persistence.*;
+=======
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+>>>>>>> parent of d3cd226 (quote/account/trader/order entity/dao/test imp)
 
 @Entity
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    int trader_id;
+<<<<<<< HEAD
+    @Column(name = "trader_id")
+    private int traderId;
+=======
+    int traderId;
+>>>>>>> parent of d3cd226 (quote/account/trader/order entity/dao/test imp)
     double amount;
 
     public int getId() {
@@ -22,11 +28,11 @@ public class Account {
     }
 
     public int getTraderId() {
-        return trader_id;
+        return traderId;
     }
 
-    public void setTraderId(int trader_id) {
-        this.trader_id = trader_id;
+    public void setTraderId(int traderId) {
+        this.traderId = traderId;
     }
 
     public double getAmount() {
