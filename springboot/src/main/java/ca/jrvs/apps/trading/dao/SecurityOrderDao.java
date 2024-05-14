@@ -16,6 +16,6 @@ public interface SecurityOrderDao extends JpaRepository<SecurityOrder, Long> {
     long count();
     void deleteAll();
 
-    void deleteAllByAccountId(Integer traderId);
+    void deleteAllByAccountId(long traderId);
 }
 
