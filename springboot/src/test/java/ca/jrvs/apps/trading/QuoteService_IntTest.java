@@ -1,4 +1,4 @@
-package ca.jrvs.apps.jdbc;
+package ca.jrvs.apps.trading;
 
 import ca.jrvs.apps.trading.dao.QuoteDao;
 import ca.jrvs.apps.trading.entity.IexQuote;
@@ -16,7 +16,6 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 @SpringBootTest(classes = {TestConfig.class, QuoteService.class})
-@Sql({"classpath:schema.sql"})
 public class QuoteService_IntTest {
 
     @Autowired

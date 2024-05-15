@@ -1,4 +1,4 @@
-package ca.jrvs.apps.jdbc;
+package ca.jrvs.apps.trading;
 
 import ca.jrvs.apps.trading.dao.QuoteDao;
 import ca.jrvs.apps.trading.model.Quote;
@@ -12,7 +12,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {TestConfig.class})
-@Sql({"classpath:schema.sql"})
 public class QuoteDaoIntTest {
     @Autowired
     private QuoteDao quoteDao;
