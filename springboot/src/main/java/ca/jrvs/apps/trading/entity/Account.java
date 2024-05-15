@@ -1,14 +1,10 @@
 package ca.jrvs.apps.trading.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     int trader_id;
     double amount;
