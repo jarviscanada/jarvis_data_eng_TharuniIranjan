@@ -1,4 +1,4 @@
-package ca.jrvs.apps.jdbc;
+package ca.jrvs.apps.trading;
 
 import ca.jrvs.apps.trading.config.MarketDataConfig;
 import ca.jrvs.apps.trading.dao.MarketDataDao;

@@ -1,5 +1,6 @@
 package ca.jrvs.apps.trading.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -7,10 +8,15 @@ import javax.persistence.Id;
 public class Quote {
     @Id
     private String ticker; //primary key
+    @Column(name = "last_price")
     private Double lastPrice;
+    @Column(name = "bid_price")
     private Double bidPrice;
+    @Column(name = "bid_size")
     private Integer bidSize;
+    @Column(name = "ask_price")
     private Double askPrice;
+    @Column(name = "ask_size")
     private Integer askSize;
 
     //getters and setters

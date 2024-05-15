@@ -1,13 +1,9 @@
 package ca.jrvs.apps.trading;
 
 import ca.jrvs.apps.trading.dao.AccountDao;
-import ca.jrvs.apps.trading.dao.QuoteDao;
-import ca.jrvs.apps.trading.dao.SecurityOrderDao;
 import ca.jrvs.apps.trading.dao.TraderDao;
 import ca.jrvs.apps.trading.entity.Account;
-import ca.jrvs.apps.trading.entity.SecurityOrder;
 import ca.jrvs.apps.trading.entity.Trader;
-import ca.jrvs.apps.trading.model.Quote;
 import ca.jrvs.apps.trading.util.TradingAppTools;
 import org.junit.After;
 import org.junit.Before;
@@ -18,32 +14,25 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {TestConfig.class})
-public class SecurityOrderDaoIntTest {
-    @Autowired
-    private SecurityOrderDao securityOrderDao;
-    private SecurityOrder savedOrder;
+public class AccountDaoIntTest {
     @Autowired
     private AccountDao accountDao;
     private Account savedAccount;
     @Autowired
     private TraderDao traderDao;
     private Trader savedTrader;
-    @Autowired
-    private QuoteDao quoteDao;
-    private Quote savedQuote;
 
     @Before
     public void init() throws ParseException {
-        securityOrderDao.deleteAll();
         accountDao.deleteAll();
         traderDao.deleteAll();
-        quoteDao.deleteAll();
 
         savedTrader = new Trader();
         savedTrader.setFirst_name("John");
@@ -58,42 +47,54 @@ public class SecurityOrderDaoIntTest {
         savedAccount.setAmount(100.01);
         accountDao.save(savedAccount);
 
-        savedQuote = new Quote(); // Initialize savedQuote here
-        savedQuote.setAskPrice(10d);
-        savedQuote.setAskSize(10);
-        savedQuote.setBidPrice(10.2d);
-        savedQuote.setBidSize(10);
-        savedQuote.setLastPrice(10.1d);
-        savedQuote.setId("AAPL");
-        quoteDao.save(savedQuote);
-
-        savedOrder = new SecurityOrder();
-        savedOrder.setAccount_id(savedAccount.getId());
-        savedOrder.setTicker(savedQuote.getId());
-        savedOrder.setStatus("PLACED");
-        savedOrder.setSize(1);
-        savedOrder.setPrice(100.0);
-        savedOrder.setNotes("n/a");
-        securityOrderDao.save(savedOrder);
     }
 
     @Test
     public void testSave() {
-        assertNotNull(savedOrder);
-        assertEquals("PLACED", savedOrder.getStatus());
-        assertEquals(100.0, savedOrder.getPrice(), 0.0001);
-        assertEquals(1, savedOrder.getSize());
-        assertEquals("n/a", savedOrder.getNotes());
+        Account account1 = new Account();
+        account1.setTraderId(savedTrader.getId());
+        account1.setAmount(200.0);
+        accountDao.save(account1);
+
+        assertNotNull(account1);
+        assertEquals(savedTrader.getId(), account1.getTraderId());
+        assertEquals(200.0, account1.getAmount(), 0.0001);
     }
 
     @Test
     public void testFindById() {
-        assertTrue(securityOrderDao.findById(savedOrder.getId()).isPresent());
+        assertTrue(accountDao.findById(savedAccount.getId()).isPresent());
+    }
+
+    @Test
+    public void testFindAll() throws ParseException {
+        Trader trader2 = new Trader();
+        trader2.setFirst_name("Alex");
+        trader2.setLast_name("Dough");
+        trader2.setCountry("UK");
+        trader2.setDob(TradingAppTools.convertStringtoDate("01-03-2000"));
+        trader2.setEmail("jane.playdough@example.com");
+        traderDao.save(trader2);
+
+        Account account2 = new Account();
+        account2.setTraderId(trader2.getId());
+        account2.setAmount(300.50);
+        accountDao.save(account2);
+
+
+        List<Account> foundAccounts = accountDao.findAll();
+        assertEquals(2, foundAccounts.size());
     }
 
     @Test
     public void testDeleteById() {
-        securityOrderDao.deleteById(savedOrder.getId());
-        assertTrue(securityOrderDao.findById(savedOrder.getId()).isEmpty());
+        accountDao.deleteById(savedAccount.getId());
+        assertTrue(accountDao.findById(savedTrader.getId()).isEmpty());
+    }
+
+    @After
+    public void clear(){
+        accountDao.deleteAll();
+        traderDao.deleteAll();
     }
 }

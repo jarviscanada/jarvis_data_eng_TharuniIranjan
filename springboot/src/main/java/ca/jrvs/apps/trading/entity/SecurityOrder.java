@@ -8,8 +8,7 @@ public class SecurityOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(name="account_id")
+    @Column(name = "account_id")
     private long accountId;
     private String ticker;
     private String status;
@@ -21,11 +20,11 @@ public class SecurityOrder {
         return id;
     }
 
-    public long getAccountId() {
+    public long getAccount_id() {
         return accountId;
     }
 
-    public void setAccountId(long accountId) {
+    public void setAccount_id(long accountId) {
         this.accountId = accountId;
     }
 

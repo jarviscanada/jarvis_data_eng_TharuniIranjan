@@ -19,4 +19,3 @@ public interface PositionDao extends JpaRepository<Position, Long> {
 
     long findByAccountId(long traderId);
 }
-

@@ -1,6 +1,6 @@
 package ca.jrvs.apps.trading.dao;
 
-import ca.jrvs.apps.trading.model.Quote;
+import ca.jrvs.apps.trading.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface QuoteDao extends JpaRepository<Quote, String> {
-    List<Quote> findAll();
-    Optional<Quote> findById(String ticker);
-    boolean existsById(String ticker);
-    void deleteById(String ticker);
+public interface AccountDao extends JpaRepository<Account, Integer> {
+    List<Account> findAll();
+    Optional<Account> findById(int id);
+    boolean existsById(int id);
+    void deleteById(int id);
     long count();
     void deleteAll();
 }
