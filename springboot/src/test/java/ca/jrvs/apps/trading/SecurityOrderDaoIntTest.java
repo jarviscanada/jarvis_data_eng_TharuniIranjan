@@ -68,7 +68,7 @@ public class SecurityOrderDaoIntTest {
         quoteDao.save(savedQuote);
 
         savedOrder = new SecurityOrder();
-        savedOrder.setAccount_id(savedAccount.getId());
+        savedOrder.setAccountId(savedAccount.getId());
         savedOrder.setTicker(savedQuote.getId());
         savedOrder.setStatus("PLACED");
         savedOrder.setSize(1);

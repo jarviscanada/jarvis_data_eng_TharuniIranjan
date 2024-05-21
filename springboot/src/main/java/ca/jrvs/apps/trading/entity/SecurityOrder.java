@@ -20,11 +20,11 @@ public class SecurityOrder {
         return id;
     }
 
-    public long getAccount_id() {
+    public long getAccountId() {
         return accountId;
     }
 
-    public void setAccount_id(long accountId) {
+    public void setAccountId(long accountId) {
         this.accountId = accountId;
     }
 

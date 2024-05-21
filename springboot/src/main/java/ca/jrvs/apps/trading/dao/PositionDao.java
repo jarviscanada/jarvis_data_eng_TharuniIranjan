@@ -18,4 +18,6 @@ public interface PositionDao extends JpaRepository<Position, Long> {
     void deleteAll();
 
     long findByAccountId(long traderId);
+
+    Optional<Position> findByAccountIdAndTicker(int id, String ticker);
 }
