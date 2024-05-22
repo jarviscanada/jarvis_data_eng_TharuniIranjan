@@ -7,8 +7,6 @@ Table of Contents
 -   [Introduction](#Introduction)
 -   [Quick Start](#Quick-Start)
 -   [Implementation](#Implementation)
-    -   [Architecture](#Architecture)
-    -   [REST API Usage](#REST-API-Usage)
 -   [Test](#Test)
 -   [Deployment](#Deployment)
 -   [Improvements](#Improvements)
