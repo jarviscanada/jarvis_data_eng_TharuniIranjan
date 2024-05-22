@@ -32,25 +32,13 @@ To get started quickly with the trading application, you can use the provided Do
 
 1.  Build Docker Images
 
-    sh
-
-    Copy code
-
     `docker build -t trading-app .`
 
 2.  Create a Docker Network
 
-    sh
-
-    Copy code
-
     `docker network create trading-net`
 
 3.  Start Containers
-
-    sh
-
-    Copy code
 
     `docker run -d --name trading-db --network trading-net -e POSTGRES_PASSWORD=password -e POSTGRES_DB=trading -v trading-data:/var/lib/postgresql/data postgres:alpine
     docker run -d --name trading-app --network trading-net -p 8080:8080 trading-app`
@@ -58,7 +46,6 @@ To get started quickly with the trading application, you can use the provided Do
 ### Try Trading-App with SwaggerUI
 
 Once the application is running, you can interact with the API using SwaggerUI available at `http://localhost:8080/swagger-ui.html`.
-![Swagger Usage Image](assets/TradingApp_Swagger.jpg)
 
 Implementation
 --------------
