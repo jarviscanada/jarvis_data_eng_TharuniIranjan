@@ -32,7 +32,7 @@ case $cmd in
   #Todo- Create container
   docker volume create pgdata
   #Todo-  Start the container
-  docker run --name jrvs-psql -e POSTGRES_USERNAME= db_username -e POSTGRES_PASSWORD=db_password -d -v pgdata:/var/lib/postgresql/data -p  5432:5432 postgres:9.6-alpine
+  docker run --name jrvs-psql -e POSTGRES_USERNAME="$db_username" -e POSTGRES_PASSWORD="$db_password" -d -v pgdata:/var/lib/postgresql/data -p  5432:5432 postgres:9.6-alpine
 
   # Make sure you understand what's `$?`
   exit $?
@@ -40,7 +40,7 @@ case $cmd in
 
   start|stop) 
   #Todo- Check instance status; exit 1 if container has not been created
-  if [ $container_status -eq 1 ]; then
+  if [ $container_status -ne 0 ]; then
     echo 'Failed to create container'
     exit 1 
   fi

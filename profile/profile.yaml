@@ -5,14 +5,14 @@ github_repo_root_url: https://github.com/jarviscanada/jarvis_data_eng_TharuniIra
 
 # Introduce yourself, your academic and professional background.
 # What excites you about the software industry and your passion. At least 80 words
-summary: I am a software developer with a Bachelor's degree in Computer Science from Ontario Tech University. During my undergraduate degree, I completed courses in Full Stack Web Development, Statistics, and Machine Learning, where I honed my skills in programming languages such as Python, R, and TensorFlow. These experiences sparked my interest in data and the importance of data management and pipelining. My work experiences at Jarvis, Osler, and the City of Brampton strengthened my skills in Java, SQL, Bash, and PowerShell. I was responsible for database management and software development, where I streamlined current processes and uncovered data insights. My exposure to an agile work environment has also equipped me with the ability to effectively manage my time and communicate and collaborate with team members. Currently, I am looking for a Data Engineering role within the financial industry where I can apply my skills and experience.
+summary: I am a software developer with a Bachelors degree in Computer Science. During my undergraduate degree I have taken many courses like Full Stack Web Development, Machine Learning, Database Systems and Concepts, Software Quality Assurance and more where I was able to gain valuable knowledge of the software development life cycle, object-oriented programming in Python and more. My work experiences at Jarvis, Osler and the City of Brampton honed my skills in Java, SQL, and Bash. I was responsible for database management and software development, where I streamlined current processes and uncovered data insights. My exposure to an agile work environment has also equipped me with the ability to effectively manage my time and communicate and collaborate with team members. Overall, these experiences have piqued my interest in the world of data, and the importance of data management and pipelining. I am looking for a role where I can grow and challenge myself, and hope to make an impact on people’s daily lives.
 
 # Group your skills by level.
 # Your skills can be anything software related (e.g. language, frameworks, methodologies, software, etc.).
 skills:
   # At least 5 skills
   proficient:
-    - Java
+    - Python
     - SQL
     - Git
     - Linux/Bash
@@ -20,7 +20,7 @@ skills:
 
   # At least 5 skills
   competent:
-    - Python
+    - Java
     - C++
     - JavaScript
     - REST APIs
@@ -38,15 +38,14 @@ jarvis_projects:
   - name: "Cluster Monitor"
     git_url: "https://github.com/jarviscanada/jarvis_data_eng_TharuniIranjan/linux_sql"
     description: This project aims to assist the Jarvis Linux Cluster Administration (LCA) team in managing a Linux cluster of 10 nodes running CentOS 7. Users can write SQL queries to extract real-time resource usage data, facilitating future resource planning. The project includes a psql instance for data persistence, a bash_agent with scripts for data collection, and Docker for database provisioning. The source code is managed on GitHub, and cron is used for scheduling the agent scripts.
-  #- name: "Core Java Apps"
-    #git_url: "/core_java"
-    #description:
-      #- "Twitter App: Curabitur laoreet tristique leo, eget suscipit nisi. Sed in sodales ex. Maecenas vitae tincidunt dui, et eleifend quam."
-      #- "JDBC App: Curabitur laoreet tristique leo, eget suscipit nisi. Sed in sodales ex. Maecenas vitae tincidunt dui, et eleifend quam."
-      #- "Grep App: Curabitur laoreet tristique leo, eget suscipit nisi. Sed in sodales ex. Maecenas vitae tincidunt dui, et eleifend quam."
-  #- name: "Springboot App"
-    #git_url: "/springboot"
-    #description: ""
+  - name: "Core Java Apps"
+    git_url: "https://github.com/jarviscanada/jarvis_data_eng_TharuniIranjan/core_java"
+    description:
+    - "JDBC App: The purpose of this project was to create a stock market simulator which allows an individual to view daily updates on particular stocks and buy or sell their shares at market price. It is to help people who want to invest but want to trial run with fake money to start off. Users are asked to enter a request type like view, buy or sell, and changes are made to the database accordingly. Java was used to develop this application with Maven as the build tool. Alpha Vantage API from RapidAPI was accessed using a GET request to access real-time stock information. JDBC was used to view/modify data in PostgreSQL. Testing was completed using Junit and Mockito."
+    - "Grep App: This Java application is an implementation of a grep tool, which searches for lines within files that match a specified regular expression pattern. The application accepts three command-line arguments. The regular expression to search for, the root directory path where the search should begin, and the output file path where the matched lines will be written. Maven was used to build the Java project, Docker was used to containerize the application, and GitHub for source code management."
+  - name: "Springboot App"
+    git_url: "https://github.com/jarviscanada/jarvis_data_eng_TharuniIranjan/springboot"
+    description: "This project builds on the JDBC stock market application, with additional features. This Java application manages clients and their accounts, executes security orders, and provides real-time market data The application leverages various technologies including Spring boot for application configuration, Logger to log information, Maven to build the project, Junit and Mockito for testing, Docker for containerization, PostgreSQL for data persistence, and IEX Cloud for real-time market data.  Software follows the Model-view-controller design pattern."
   #- name: "Python Data Analytics"
     #git_url: "/python_data_anlytics"
     #description: ""
@@ -63,22 +62,17 @@ jarvis_projects:
 # List of personal or academic projects
 # Feel free to add more projects
 highlighted_projects:
-    #project1
-  - name: "Learning Leaf - Web Application"
-    git_url: "https://github.com/TharuniI/LearningLeaf/tree/main/majorgroupproject-nng-learning-leaf/majorgroupproject-nng-main"
-    description: "This full stack website was developed during COVID-19 and was created with the intent of enhancing the online learning experience. Users can access this website through different account types and are shown their corresponding dashboard. This application was coded using JavaScript, alongside the frontend framework Vue.js. Firebase services were utilized for the backend, including: authentication, cloud functions like sending event-based email notifications, and Firestore for a real time database."
-    #project2
-  - name: "Auction Simulator - Software Quality Assurance"
-    git_url: "https://github.com/TharuniI/AuctionSim"
-    description: "Mimics an online auctioning application that allows users to login as a particular user type, and perform actions depending on their set of permissions (i.e. bid/auction/delete users/etc).Python was used for the Backend, along with Pytest for testing. C++ was used for the Frontend and a Makefile to execute the code. The project was divided into 6 phases: requirements gathering, UML design and white box testing, coding,unit/branch/system testing, deployment and acceptance testing, maintenance and regression testing. Requirements changed according to customer needs." 
-   #projct4
-  - name: "Whisper - Java Application"
-    git_url: "https://github.com/TharuniI/Whisper"
-    description: "An online chat server that allows multiple users to login into a group chat and see previous messages, and any new messages are sent to all online users in real time. This application was created used Java and Javafx for the GUI and includes a database to store information, and server sockets for people to communicate with each other."
-   #project3 
+   #project1 
   - name: "ProdClass - Machine Learning"
     git_url: "https://github.com/TharuniI/ProdClass-ThesisProject"
-    description: "A research study on the ability to automatically classify product features into positive and negative affiliations using a product review data set. The purpose of this project is to utilize customer reviews to allow companies to improve their products and subsequently increase customer purchasing. Natural Language Processing (NLP) techniques including sentiment analysis and text modelling was utilized to complete the task. Code was developed on Google Collab using Tensorflow and other Python libraries like scikit-learn and Pandas."
+    description: "A research study on the ability to automatically classify product features into positive and negative affiliations using a product review data set. The purpose of this project is to utilize customer reviews to allow companies to improve their products and subsequently increase customer purchasing. Natural Language Processing (NLP) techniques including sentiment analysis and text modelling was utilized to complete the task. Code was developed on Google Collab using Tensorflow and other Python libraries like scikit-learn and Pandas. Extensive research was completed on the campus library for approaches and best practices. Weekly meetings were held with my professor where we discussed progress, concerns and next steps, and a report was completed to summarize my findings."
+    #project2
+  - name: "Learning Leaf - Full Stack Application"
+    git_url: "https://github.com/TharuniI/LearningLeaf/tree/main/majorgroupproject-nng-learning-leaf/majorgroupproject-nng-main"
+    description: "This web application was developed during COVID-19 and was created with the intent of enhancing the online learning experience. Users can access this website through different account types and are shown their corresponding dashboard. This application was coded using JavaScript dynamically update content, alongside the frontend framework Vue.js to build the user interface. It builds on top of standard HTML, CSS, and JavaScript to easily build components like scale students use to rate the lecture, and the table for professors to view the student reactions to a lecture, and more. It also has Firebase support, which was used in the backend. Services used include: authentication, cloud functions like sending event-based email notifications, and Firestore for a real time database."
+    #project3
+  - name: "IMDB Emulator - Database Development"
+    description: "The purpose of this project was to design and develop a database for an IMDB like website. Initial research and requirements gathering was done to understand the flow of the application. Use case diagrams and ERD were created using LucidChart and Toad Data Modeler. At this stage, information like what tables were needed, what the primary keys are, what columns each table contained, how each table is connected were established. PostgresSQL’s pgAdmin was used to create the table, add values, and query for certain information requested by the customer." 
 
 #List of professional experience
 #The job description allows hiring managers to understand your job and the technologies you used(e.g. programming languages, libraries, algorithms, hardware, tools, etc.).
@@ -89,19 +83,19 @@ professional_experience:
     company: "Jarvis"
     duration: "2024-present"
     # The project description must start with an action verb (https://bit.ly/3guO98u)
-    description: "Developed and managed databases using SQL and Bash scripts, and programmed in Java and Python to analyze data and improve current processes. Employed excellent time management and communication skills to effectively complete tasks and convey progress during scrum meetings."
+    description: "I managed databases using SQL to ensure organized data storage and efficient manipulation, completing CRUD operations for smooth data retrieval. Employing Bash scripting, I automated routine tasks like system maintenance, enhancing overall workflow efficiency. Additionally, I developed Java applications collaboratively to improve firm-wide processes, including secure text-based searching of company documents, and conducted thorough data analytics using Python with libraries like Pandas, NumPy, and Matplotlib to inform strategic decision-making based on market trends."
   - title: "Applications Analyst"
     company: "Osler, Hoskin, and Harcourt LLP"
     duration: "2022"
-    description: "Managed various lawyer processes by designing, developing, deploying, and unit testing custom scripts in PowerShell and SQL, increasing overall efficiency."
+    description: "In this role, I automated data transfer processes using PowerShell scripts, optimizing system performance and ensuring efficient task completion through rigorous testing and documentation. I efficiently managed cross-departmental requests, delivering customized Excel reports promptly by leveraging SQL queries and adapting to evolving needs. Additionally, I provided crucial technical support by proactively monitoring system alerts, conducting thorough root cause analyses, and documenting findings to enhance software functionality and resolve issues, contributing to the smooth operation of the Information Service department."
   - title: "Data Analyst"
     company: "City of Brampton"
     duration: "2022"
-    description: "Utilized excellent analytical skills in order to manage, clean, manipulate data to discover trends and demonstrate them using data visualizations to improve data readability."
+    description: "In my position as a Data Analyst, I employed advanced statistical methods to analyze data from 100 companies, uncovering trends crucial for informed decision-making in building inspections, thereby enhancing customer satisfaction. Additionally, I leveraged R programming to create intuitive data visualizations of customer data, ultimately improving operational efficiency."
   - title: "Teaching Assistant"
     company: "Ontario Tech University"
     duration: "2021"
-    description: "Provided technical support to students on programming assignments and projects, including debugging code, explaining software design patterns and algorithms, and troubleshooting technical issues, increasing academic success."
+    description: "As a teaching assistant, I designed and executed engaging lesson plans for software development labs, fostering a deeper understanding of key OOP concepts among a class of 20 students through diverse instructional methods. During office hours, I demonstrated adept debugging skills by guiding students through problem-solving processes, improving the quality of their work and promoting independent learning. Additionally, I contributed to team meetings by implementing standardized evaluation practices, offering constructive feedback to enhance the overall student learning experience, and efficiently managing grading and feedback."
 
 #List of edcuation
 education: 
@@ -114,7 +108,7 @@ education:
       - "Major Entrance Scholarship (2018)"
       - "Dean's List (2020, 2023)"
       - "President's List (2020)"
-      # - "GPA: 3.45/4.30"
+      #- "GPA: 3.45/4.30"
   #- school_name: "XYZ university"
     #duration: "2016-2018"
     #degree: "Master of Engineering"
@@ -132,6 +126,6 @@ others:
       #- "Winner"
   - title: "Hobbies"
     bullets:
-      - "Leisure Skating: Still a work in progress, but I am learning to skate without falling down!"
+      # - "Leisure Skating: Still a work in progress, but I am learning to skate without falling down!"
       - "Board games: I love playing strategic-style board games with my friends. Some popular ones we are currently playing are Codenames, Coup, and Here to Slay"
       - "Home Improvement: I started by painting my house, but now I've done some roofing and sub flooring work. I love watching home improvement shows like Property Brothers, and hope to do more work around my house!"

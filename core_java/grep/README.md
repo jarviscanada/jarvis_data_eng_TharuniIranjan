@@ -7,21 +7,20 @@ To run the application, follow the below steps:
 # STEP 1: navigate to the correct directory #
 cd core_java/grep
 
-# STEP 2: run maven #
-mvn clean install
-
-# STEP 3: run application #
-# Approach 1: JAR File
+# STEP 2: run application #
 outfile=grep_$(date +%F_%T).txt
 
+# Approach 1: JAR File
+mvn clean install
 java -cp target/grep-1.0-SNAPSHOT.jar ca.jrvs.apps.grep.JavaGrepImp ${regex_pattern} ${src_dir} ./out/${outfile}
 
 # Approach 2: Docker Container
-outfile=grep_$(date +%F_%T).txt
+docker_user=tharunii
+docker pull ${docker_user}/grep
 
 docker run --rm \
--v `pwd`/data:/data -v `pwd`/out:/out jrvs/grep \
-${regex_pattern} ${src_dir} /out/${outfile}
+-v `pwd`/data:/data -v `pwd`/log:/log \
+${docker_user}/grep ${regex_pattern} ${src_dir} ./out/${outfile}
 ```
 Keep in mind: regex_pattern and src_dir must be defined beforehand, or replaced with strings within the command.
 
@@ -38,12 +37,11 @@ Here's a brief summary of the key components and functionality of the JavaGrepIm
 8. The writeToFile method writes the list of matching lines to the specified output file.
 
 # Test
-In order to determine the application is running as expected, manual testing can be completed by running the corresponding Linux command within your terminal. Logger will also indicate whether the application is running without disruptions. The command is as follows:
+Logger will indicate whether the application is running without disruptions. In order to determine if we are getting the expected output, manual testing can be completed by running the corresponding Linux command within terminal:
 ```bash
 grep -Er ${regex_pattern} ${src_dir}
 ```
 
-### Example
 The below example was used for testing purposes:
 ```bash
 # define the 3 cmd line args
@@ -60,14 +58,12 @@ cat out/$outfile
 ```
 
 # Deployment
-Docker was used to dockerize the grep app, and GitHub was used for source code management. When running the application for the first time, make sure to pull the image from DockerHub:
+Maven was used to build the Java project, Docker was used to containerize the application, and GitHub for source code management. When running the application for the first time, make sure to pull the image from DockerHub:
 ```bash
-docker/pull tharunii/grep
+docker pull ${docker_user}/grep
 ```
 
 # Improvement 
 1. Add grep options like --ignore-case and --max-count=NUM in the command line argument
-2. Make output more visually appealing with rows, columns and titles
-3. In the output file, include features: --line-number, --with-filename
-4. Include addtional features like the total count of matched lines, and a count for distinct matches
-
+2. Make output more visually appealing with rows, columns, titles and add features like: --line-number, --with-filename
+3. Make the input a GUI so it is easier for users to enter their search requests
