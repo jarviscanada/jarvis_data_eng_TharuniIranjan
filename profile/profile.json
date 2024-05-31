@@ -15,24 +15,18 @@
   "github_repo_root_url": "https://github.com/jarviscanada/jarvis_data_eng_TharuniIranjan",
   "highlighted_projects": [
     {
-      "description": "This full stack website was developed during COVID-19 and was created with the intent of enhancing the online learning experience. Users can access this website through different account types and are shown their corresponding dashboard. This application was coded using JavaScript dynamically update content, alongside the frontend framework Vue.js to build the user interface. It builds on top of standard HTML, CSS, and JavaScript to easily build components like scale students use to rate the lecture, and the table for professors to view the student reactions to a lecture, and more. It also has Firebase support, which was used in the backend. Services used include: authentication, cloud functions like sending event-based email notifications, and Firestore for a real time database.",
-      "git_url": "https://github.com/TharuniI/LearningLeaf/tree/main/majorgroupproject-nng-learning-leaf/majorgroupproject-nng-main",
-      "name": "Learning Leaf - Web Application"
-    },
-    {
-      "description": "Mimics an online auctioning application that allows users to login as a particular user type, and perform actions depending on their set of permissions. Python was used for the Backend, to retrieve and store data appropriately. Pytest was utilized to perform a series of tests. First, there was unit testing was completed to make sure each action type, like login, auction, bid, works individually. assertEquals was used to verify the expected results match actual results against some test data. Next, integration testing was completed by testing a combination of actions and comparing the results to ensure components combined properly. Finally functional testing was done to make sure the entire application was working as one unit. Once all tests were complete, the application was deployed, and changes were made according to customer needs. Regression testing was completed where we re-run functional tests to ensure the changes did not affect the overall application and its performance.",
-      "git_url": "https://github.com/TharuniI/AuctionSim",
-      "name": "Auction Simulator - Software Quality Assurance"
-    },
-    {
-      "description": "An online chat server that allows users to login into a group chat where they can send and receive messages in real time whilst having access to any previous messages sent in their absence. This application uses Javafx for the GUI so uses have text areas and buttons to interact with. Java was used for the bulk of the application. It was used to store and receive data, and uses server sockets to listen to and receive requests and displays information according to user input.",
-      "git_url": "https://github.com/TharuniI/Whisper",
-      "name": "Whisper - Java Application"
-    },
-    {
       "description": "A research study on the ability to automatically classify product features into positive and negative affiliations using a product review data set. The purpose of this project is to utilize customer reviews to allow companies to improve their products and subsequently increase customer purchasing. Natural Language Processing (NLP) techniques including sentiment analysis and text modelling was utilized to complete the task. Code was developed on Google Collab using Tensorflow and other Python libraries like scikit-learn and Pandas. Extensive research was completed on the campus library for approaches and best practices. Weekly meetings were held with my professor where we discussed progress, concerns and next steps, and a report was completed to summarize my findings.",
       "git_url": "https://github.com/TharuniI/ProdClass-ThesisProject",
       "name": "ProdClass - Machine Learning"
+    },
+    {
+      "description": "This web application was developed during COVID-19 and was created with the intent of enhancing the online learning experience. Users can access this website through different account types and are shown their corresponding dashboard. This application was coded using JavaScript dynamically update content, alongside the frontend framework Vue.js to build the user interface. It builds on top of standard HTML, CSS, and JavaScript to easily build components like scale students use to rate the lecture, and the table for professors to view the student reactions to a lecture, and more. It also has Firebase support, which was used in the backend. Services used include: authentication, cloud functions like sending event-based email notifications, and Firestore for a real time database.",
+      "git_url": "https://github.com/TharuniI/LearningLeaf/tree/main/majorgroupproject-nng-learning-leaf/majorgroupproject-nng-main",
+      "name": "Learning Leaf - Full Stack Application"
+    },
+    {
+      "description": "The purpose of this project was to design and develop a database for an IMDB like website. Initial research and requirements gathering was done to understand the flow of the application. Use case diagrams and ERD were created using LucidChart and Toad Data Modeler. At this stage, information like what tables were needed, what the primary keys are, what columns each table contained, how each table is connected were established. PostgresSQL’s pgAdmin was used to create the table, add values, and query for certain information requested by the customer.",
+      "name": "IMDB Emulator - Database Development"
     }
   ],
   "jarvis_projects": [
@@ -48,6 +42,11 @@
       ],
       "git_url": "https://github.com/jarviscanada/jarvis_data_eng_TharuniIranjan/core_java",
       "name": "Core Java Apps"
+    },
+    {
+      "description": "This project builds on the JDBC stock market application, with additional features. This Java application manages clients and their accounts, executes security orders, and provides real-time market data The application leverages various technologies including Spring boot for application configuration, Logger to log information, Maven to build the project, Junit and Mockito for testing, Docker for containerization, PostgreSQL for data persistence, and IEX Cloud for real-time market data.  Software follows the Model-view-controller design pattern.",
+      "git_url": "https://github.com/jarviscanada/jarvis_data_eng_TharuniIranjan/springboot",
+      "name": "Springboot App"
     }
   ],
   "name": "Tharuni Iranjan",
@@ -94,7 +93,7 @@
   ],
   "skills": {
     "competent": [
-      "Python",
+      "Java",
       "C++",
       "JavaScript",
       "REST APIs",
@@ -108,12 +107,12 @@
       "Google Cloud Platform"
     ],
     "proficient": [
-      "Java",
+      "Python",
       "SQL",
       "Git",
       "Linux/Bash",
       "Agile/Scrum"
     ]
   },
-  "summary": "I am a software developer with a Bachelor's degree in Computer Science from Ontario Tech University. During my undergraduate degree, I completed courses in Full Stack Web Development, Statistics, and Machine Learning, where I honed my skills in programming languages such as Python, R, and TensorFlow. These experiences sparked my interest in data and the importance of data management and pipelining. My work experiences at Jarvis, Osler, and the City of Brampton strengthened my skills in Java, SQL, Bash, and PowerShell. I was responsible for database management and software development, where I streamlined current processes and uncovered data insights. My exposure to an agile work environment has also equipped me with the ability to effectively manage my time and communicate and collaborate with team members. Currently, I am looking for a Data Engineering role within the financial industry where I can apply my skills and experience."
+  "summary": "I am a software developer with a Bachelors degree in Computer Science. During my undergraduate degree I have taken many courses like Full Stack Web Development, Machine Learning, Database Systems and Concepts, Software Quality Assurance and more where I was able to gain valuable knowledge of the software development life cycle, object-oriented programming in Python and more. My work experiences at Jarvis, Osler and the City of Brampton honed my skills in Java, SQL, and Bash. I was responsible for database management and software development, where I streamlined current processes and uncovered data insights. My exposure to an agile work environment has also equipped me with the ability to effectively manage my time and communicate and collaborate with team members. Overall, these experiences have piqued my interest in the world of data, and the importance of data management and pipelining. I am looking for a role where I can grow and challenge myself, and hope to make an impact on people’s daily lives."
 }

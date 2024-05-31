@@ -5,14 +5,14 @@ github_repo_root_url: https://github.com/jarviscanada/jarvis_data_eng_TharuniIra
 
 # Introduce yourself, your academic and professional background.
 # What excites you about the software industry and your passion. At least 80 words
-summary: I am a software developer with a Bachelor's degree in Computer Science from Ontario Tech University. During my undergraduate degree, I completed courses in Full Stack Web Development, Statistics, and Machine Learning, where I honed my skills in programming languages such as Python, R, and TensorFlow. These experiences sparked my interest in data and the importance of data management and pipelining. My work experiences at Jarvis, Osler, and the City of Brampton strengthened my skills in Java, SQL, Bash, and PowerShell. I was responsible for database management and software development, where I streamlined current processes and uncovered data insights. My exposure to an agile work environment has also equipped me with the ability to effectively manage my time and communicate and collaborate with team members. Currently, I am looking for a Data Engineering role within the financial industry where I can apply my skills and experience.
+summary: I am a software developer with a Bachelors degree in Computer Science. During my undergraduate degree I have taken many courses like Full Stack Web Development, Machine Learning, Database Systems and Concepts, Software Quality Assurance and more where I was able to gain valuable knowledge of the software development life cycle, object-oriented programming in Python and more. My work experiences at Jarvis, Osler and the City of Brampton honed my skills in Java, SQL, and Bash. I was responsible for database management and software development, where I streamlined current processes and uncovered data insights. My exposure to an agile work environment has also equipped me with the ability to effectively manage my time and communicate and collaborate with team members. Overall, these experiences have piqued my interest in the world of data, and the importance of data management and pipelining. I am looking for a role where I can grow and challenge myself, and hope to make an impact on people’s daily lives.
 
 # Group your skills by level.
 # Your skills can be anything software related (e.g. language, frameworks, methodologies, software, etc.).
 skills:
   # At least 5 skills
   proficient:
-    - Java
+    - Python
     - SQL
     - Git
     - Linux/Bash
@@ -20,7 +20,7 @@ skills:
 
   # At least 5 skills
   competent:
-    - Python
+    - Java
     - C++
     - JavaScript
     - REST APIs
@@ -43,9 +43,9 @@ jarvis_projects:
     description:
     - "JDBC App: The purpose of this project was to create a stock market simulator which allows an individual to view daily updates on particular stocks and buy or sell their shares at market price. It is to help people who want to invest but want to trial run with fake money to start off. Users are asked to enter a request type like view, buy or sell, and changes are made to the database accordingly. Java was used to develop this application with Maven as the build tool. Alpha Vantage API from RapidAPI was accessed using a GET request to access real-time stock information. JDBC was used to view/modify data in PostgreSQL. Testing was completed using Junit and Mockito."
     - "Grep App: This Java application is an implementation of a grep tool, which searches for lines within files that match a specified regular expression pattern. The application accepts three command-line arguments. The regular expression to search for, the root directory path where the search should begin, and the output file path where the matched lines will be written. Maven was used to build the Java project, Docker was used to containerize the application, and GitHub for source code management."
-  #- name: "Springboot App"
-    #git_url: "/springboot"
-    #description: ""
+  - name: "Springboot App"
+    git_url: "https://github.com/jarviscanada/jarvis_data_eng_TharuniIranjan/springboot"
+    description: "This project builds on the JDBC stock market application, with additional features. This Java application manages clients and their accounts, executes security orders, and provides real-time market data The application leverages various technologies including Spring boot for application configuration, Logger to log information, Maven to build the project, Junit and Mockito for testing, Docker for containerization, PostgreSQL for data persistence, and IEX Cloud for real-time market data.  Software follows the Model-view-controller design pattern."
   #- name: "Python Data Analytics"
     #git_url: "/python_data_anlytics"
     #description: ""
@@ -62,22 +62,17 @@ jarvis_projects:
 # List of personal or academic projects
 # Feel free to add more projects
 highlighted_projects:
-    #project1
-  - name: "Learning Leaf - Web Application"
-    git_url: "https://github.com/TharuniI/LearningLeaf/tree/main/majorgroupproject-nng-learning-leaf/majorgroupproject-nng-main"
-    description: "This full stack website was developed during COVID-19 and was created with the intent of enhancing the online learning experience. Users can access this website through different account types and are shown their corresponding dashboard. This application was coded using JavaScript dynamically update content, alongside the frontend framework Vue.js to build the user interface. It builds on top of standard HTML, CSS, and JavaScript to easily build components like scale students use to rate the lecture, and the table for professors to view the student reactions to a lecture, and more. It also has Firebase support, which was used in the backend. Services used include: authentication, cloud functions like sending event-based email notifications, and Firestore for a real time database."
-    #project2
-  - name: "Auction Simulator - Software Quality Assurance"
-    git_url: "https://github.com/TharuniI/AuctionSim"
-    description: "Mimics an online auctioning application that allows users to login as a particular user type, and perform actions depending on their set of permissions. Python was used for the Backend, to retrieve and store data appropriately. Pytest was utilized to perform a series of tests. First, there was unit testing was completed to make sure each action type, like login, auction, bid, works individually. assertEquals was used to verify the expected results match actual results against some test data. Next, integration testing was completed by testing a combination of actions and comparing the results to ensure components combined properly. Finally functional testing was done to make sure the entire application was working as one unit. Once all tests were complete, the application was deployed, and changes were made according to customer needs. Regression testing was completed where we re-run functional tests to ensure the changes did not affect the overall application and its performance." 
-   #projct4
-  - name: "Whisper - Java Application"
-    git_url: "https://github.com/TharuniI/Whisper"
-    description: "An online chat server that allows users to login into a group chat where they can send and receive messages in real time whilst having access to any previous messages sent in their absence. This application uses Javafx for the GUI so uses have text areas and buttons to interact with. Java was used for the bulk of the application. It was used to store and receive data, and uses server sockets to listen to and receive requests and displays information according to user input."
-   #project3 
+   #project1 
   - name: "ProdClass - Machine Learning"
     git_url: "https://github.com/TharuniI/ProdClass-ThesisProject"
     description: "A research study on the ability to automatically classify product features into positive and negative affiliations using a product review data set. The purpose of this project is to utilize customer reviews to allow companies to improve their products and subsequently increase customer purchasing. Natural Language Processing (NLP) techniques including sentiment analysis and text modelling was utilized to complete the task. Code was developed on Google Collab using Tensorflow and other Python libraries like scikit-learn and Pandas. Extensive research was completed on the campus library for approaches and best practices. Weekly meetings were held with my professor where we discussed progress, concerns and next steps, and a report was completed to summarize my findings."
+    #project2
+  - name: "Learning Leaf - Full Stack Application"
+    git_url: "https://github.com/TharuniI/LearningLeaf/tree/main/majorgroupproject-nng-learning-leaf/majorgroupproject-nng-main"
+    description: "This web application was developed during COVID-19 and was created with the intent of enhancing the online learning experience. Users can access this website through different account types and are shown their corresponding dashboard. This application was coded using JavaScript dynamically update content, alongside the frontend framework Vue.js to build the user interface. It builds on top of standard HTML, CSS, and JavaScript to easily build components like scale students use to rate the lecture, and the table for professors to view the student reactions to a lecture, and more. It also has Firebase support, which was used in the backend. Services used include: authentication, cloud functions like sending event-based email notifications, and Firestore for a real time database."
+    #project3
+  - name: "IMDB Emulator - Database Development"
+    description: "The purpose of this project was to design and develop a database for an IMDB like website. Initial research and requirements gathering was done to understand the flow of the application. Use case diagrams and ERD were created using LucidChart and Toad Data Modeler. At this stage, information like what tables were needed, what the primary keys are, what columns each table contained, how each table is connected were established. PostgresSQL’s pgAdmin was used to create the table, add values, and query for certain information requested by the customer." 
 
 #List of professional experience
 #The job description allows hiring managers to understand your job and the technologies you used(e.g. programming languages, libraries, algorithms, hardware, tools, etc.).
